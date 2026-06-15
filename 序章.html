@@ -197,6 +197,11 @@
   <a class="nav-item" href="#s-db"><span class="ni">🗄️</span>数据库固定配置</a>
   <a class="nav-item" href="#s-req-rule"><span class="ni">📅</span>需求更新规则</a>
   <a class="nav-item" href="#s-rules"><span class="ni">📌</span>AI 执行原则</a>
+
+  <div class="nav-group-title">🔁 Ralph 自动循环</div>
+  <a class="nav-item" href="#s-ralph"><span class="ni">🔁</span>Ralph 是什么</a>
+  <a class="nav-item" href="#s-ralph-flow"><span class="ni">⚙️</span>执行流程</a>
+  <a class="nav-item" href="#s-ralph-prompt"><span class="ni">💬</span>如何对 Codex 说</a>
 </nav>
 
 <!-- ===== 主内容 ===== -->
@@ -666,6 +671,154 @@ USE `blog_db`;</pre>
     <h3>🔁 多项目并发说明</h3>
     <div class="alert alert-blue">
       用户可能同时推进多个项目，每个项目只看自己文件夹里的内容。不同项目之间完全隔离，不要混淆。每个项目在 MySQL localhost:3306 下单独建一个库，命名不同，互不干扰。
+    </div>
+  </div>
+
+  <!-- ===== Ralph 自动循环 ===== -->
+  <div class="section" id="s-ralph">
+    <div class="section-hd">
+      <div class="s-icon bg-indigo">🔁</div>
+      <div><div class="s-title">Ralph 自动循环——AI 不中断持续开发</div><div class="s-sub">让 Codex 自己跑完所有任务，无需盯着</div></div>
+    </div>
+
+    <div class="alert alert-green">
+      ✅ <strong>Ralph 已集成到本项目。</strong>启动文件：<code>启动Ralph-博客开发.bat</code>（双击即可）。AI 会自动循环完成 <code>prd.json</code> 中的所有任务，中途断了重新双击继续，已完成的任务不会重复做。
+    </div>
+
+    <h3>Ralph 是什么</h3>
+    <p>Ralph 是一个<strong>自主 AI 任务循环脚本</strong>，原理很简单：</p>
+    <ul>
+      <li>你把所有要做的功能写进 <code>prd.json</code>（任务清单）</li>
+      <li>Ralph 每次让 Codex 完成一个任务，完成后自动 <code>git commit</code></li>
+      <li>在 <code>prd.json</code> 中把该任务标记为完成（<code>passes: true</code>）</li>
+      <li>自动继续下一个，直到所有任务完成</li>
+      <li>你不需要盯着，去做别的事，回来看结果就行</li>
+    </ul>
+
+    <h3>关键文件说明</h3>
+    <table>
+      <thead><tr><th>文件</th><th>作用</th></tr></thead>
+      <tbody>
+        <tr><td><code>prd.json</code></td><td>任务清单，每个任务有 passes 字段记录完成状态</td></tr>
+        <tr><td><code>ralph.ps1</code></td><td>主循环脚本（PowerShell），驱动 codex exec 反复运行</td></tr>
+        <tr><td><code>CODEX.md</code></td><td>给 Codex 的指令模板，告诉它每次该做什么</td></tr>
+        <tr><td><code>progress.txt</code></td><td>AI 自动追加的进度日志，每次迭代后记录学到的内容</td></tr>
+        <tr><td><code>启动Ralph-博客开发.bat</code></td><td>双击启动入口，自动设置 API Key 和项目路径</td></tr>
+      </tbody>
+    </table>
+
+    <h3>中断后如何继续</h3>
+    <div class="alert alert-yellow">
+      ⚠️ 断电、关机、手动 Ctrl+C 中止后，<strong>重新双击 bat 文件即可继续</strong>。<br>
+      Ralph 每次启动都会读 <code>prd.json</code>，<code>passes: true</code> 的任务直接跳过，从第一个 <code>passes: false</code> 的任务接着做。<strong>已完成的工作绝对不会丢失或重复。</strong>
+    </div>
+  </div>
+
+  <div class="section" id="s-ralph-flow">
+    <div class="section-hd">
+      <div class="s-icon bg-purple">⚙️</div>
+      <div><div class="s-title">Ralph 执行流程详解</div><div class="s-sub">每一次迭代发生了什么</div></div>
+    </div>
+
+    <div class="phase-grid">
+      <div class="phase-card"><div class="pnum">STEP 1</div><div class="pname">读取任务</div><div class="pdesc">从 prd.json 找 priority 最小且 passes=false 的任务</div></div>
+      <div class="phase-card"><div class="pnum">STEP 2</div><div class="pname">构建提示词</div><div class="pdesc">把 CODEX.md + prd.json + progress.txt 合并成完整提示词</div></div>
+      <div class="phase-card"><div class="pnum">STEP 3</div><div class="pname">调用 Codex</div><div class="pdesc">执行 codex exec --dangerously-bypass-approvals-and-sandbox</div></div>
+      <div class="phase-card"><div class="pnum">STEP 4</div><div class="pname">Codex 工作</div><div class="pdesc">Codex 读文件、写代码、git commit，自动完成任务</div></div>
+      <div class="phase-card"><div class="pnum">STEP 5</div><div class="pname">标记完成</div><div class="pdesc">Codex 把 prd.json 中该任务的 passes 改为 true</div></div>
+      <div class="phase-card"><div class="pnum">STEP 6</div><div class="pname">循环</div><div class="pdesc">回到 STEP 1，直到所有任务完成或输出 COMPLETE</div></div>
+    </div>
+
+    <h3>prd.json 任务状态示例</h3>
+    <pre>{
+  "userStories": [
+    { "id": "US-001", "title": "完善首页", "passes": true  },  ← 已完成，跳过
+    { "id": "US-002", "title": "文章详情", "passes": false },  ← 当前执行这个
+    { "id": "US-003", "title": "后台登录", "passes": false }   ← 排队等待
+  ]
+}</pre>
+
+    <h3>查看当前进度</h3>
+    <pre>查看哪些完成了：
+打开 prd.json，看每个任务的 "passes" 字段
+
+查看 AI 的学习记录：
+打开 progress.txt
+
+查看提交历史：
+git log --oneline -10</pre>
+  </div>
+
+  <div class="section" id="s-ralph-prompt">
+    <div class="section-hd">
+      <div class="s-icon bg-green">💬</div>
+      <div><div class="s-title">如何对 Codex 说——开始新项目的标准话术</div><div class="s-sub">复制这段话发给 Codex，它就知道怎么做了</div></div>
+    </div>
+
+    <div class="alert alert-purple">
+      📌 <strong>重要：</strong>先用 Codex 做完 PHASE 0~2（需求分析、产品设计、UI原型），等你确认 UI 后，再配合 Ralph 自动完成剩余开发。
+    </div>
+
+    <h3>第一步：启动新项目（发给 Codex 交互模式）</h3>
+    <div class="db-card">
+      <div class="db-title">// 复制这段话，粘贴给 Codex</div>
+      <div style="color:#e2e8f0;line-height:1.9;font-size:13px;">
+        看序章.html 文件，然后帮我开发一个【<span style="color:#34d399">填写你的项目名称</span>】，【<span style="color:#34d399">一句话描述功能</span>】。<br>
+        先完成 PHASE 0 需求分析、PHASE 1 产品设计、PHASE 2 UI设计原型（生成 ui_xxx.html 文件），<br>
+        完成后暂停等我确认 UI，我确认后你再继续。
+      </div>
+    </div>
+
+    <h3>第二步：确认 UI 后继续（确认后发给 Codex）</h3>
+    <div class="db-card">
+      <div class="db-title">// UI 原型确认后发这段</div>
+      <div style="color:#e2e8f0;line-height:1.9;font-size:13px;">
+        UI 确认了，继续做 PHASE 3 前端开发和 PHASE 4 后端开发。<br>
+        每做完一个功能模块就 git commit 一次，保持提交频率。
+      </div>
+    </div>
+
+    <h3>第三步：配合 Ralph 自动完成剩余任务</h3>
+    <p>当 Codex 完成了前后端基础框架后，把剩余要完成的功能写入 <code>prd.json</code>，然后：</p>
+    <ul>
+      <li>双击 <code>启动Ralph-博客开发.bat</code></li>
+      <li>Ralph 自动让 Codex 循环完成所有剩余任务</li>
+      <li>你可以去做别的事，回来看 <code>progress.txt</code> 查进度</li>
+    </ul>
+
+    <h3>完整对话示例（博客项目）</h3>
+    <table>
+      <thead><tr><th>你说的话</th><th>Codex 做的事</th><th>你需要做什么</th></tr></thead>
+      <tbody>
+        <tr><td>看序章.html，帮我开发一个博客系统，有前台和后台</td><td>做需求分析、产品设计、生成 ui_*.html 原型</td><td>查看 ui_*.html，确认样式是否满意</td></tr>
+        <tr><td>UI 确认了，继续做前后端</td><td>开发 frontend/ 和 backend/，git commit</td><td>看代码是否基本可运行</td></tr>
+        <tr><td>（无需说话）双击 bat 文件</td><td>Ralph 自动循环完成 prd.json 中所有任务</td><td>等待，查看 progress.txt</td></tr>
+        <tr><td>cd backend &amp;&amp; node server.js</td><td>—</td><td>访问 http://localhost:8942 验收</td></tr>
+      </tbody>
+    </table>
+
+    <h3>prd.json 怎么写（新项目模板）</h3>
+    <pre>{
+  "project": "项目名称",
+  "branchName": "ralph/功能名称",
+  "description": "本次开发目标",
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "第一个功能",
+      "description": "作为用户，我希望...",
+      "acceptanceCriteria": ["验收标准1", "验收标准2"],
+      "priority": 1,
+      "passes": false,
+      "notes": "备注（可选）"
+    }
+  ]
+}</pre>
+
+    <div class="alert alert-red">
+      ⚠️ <strong>任务拆分原则：每个任务要足够小，Codex 能在一次会话内完成。</strong><br>
+      ✅ 好的任务：「添加评论列表API」「完善首页文章展示」「实现登录验证」<br>
+      ❌ 太大：「实现完整登录系统」「重构整个后端」「开发全部功能」
     </div>
   </div>
 
