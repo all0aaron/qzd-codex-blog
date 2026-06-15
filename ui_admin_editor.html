@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>文章编辑 - 墨丘博客系统</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { min-height: 100vh; display: flex; background: #f4f6f8; color: #172033; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
+    a { color: inherit; text-decoration: none; }
+    aside { width: 248px; min-width: 248px; background: #18212f; color: #aeb8c8; min-height: 100vh; }
+    .brand { padding: 22px 20px; border-bottom: 1px solid #263244; color: #fff; font-weight: 800; }
+    .nav-title { padding: 18px 20px 7px; font-size: 11px; color: #65758c; font-weight: 800; letter-spacing: 1px; }
+    .nav a { display: block; padding: 11px 20px; border-left: 3px solid transparent; font-size: 14px; }
+    .nav a.active, .nav a:hover { color: #fff; background: #243145; border-left-color: #38bdf8; }
+    main { flex: 1; padding: 26px 30px 44px; }
+    .top { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 18px; }
+    h1 { font-size: 25px; }
+    .sub { color: #667085; font-size: 13.5px; margin-top: 5px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 38px; padding: 0 14px; border-radius: 8px; border: 1px solid #d8e1ec; background: #fff; color: #334155; font-weight: 700; font-size: 13px; }
+    .primary { background: #0f766e; color: #fff; border-color: #0f766e; }
+    .danger { color: #b42318; border-color: #f4c7c3; }
+    .layout { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; }
+    .card { background: #fff; border: 1px solid #e4eaf1; border-radius: 8px; padding: 18px; }
+    label { display: block; font-size: 13px; color: #344054; font-weight: 800; margin: 14px 0 7px; }
+    input, textarea, select { width: 100%; border: 1px solid #d8e1ec; border-radius: 8px; padding: 11px 12px; font: inherit; outline: 0; background: #fff; }
+    textarea { resize: vertical; }
+    .summary { min-height: 86px; }
+    .content { min-height: 420px; line-height: 1.8; }
+    .hint { color: #7b8798; font-size: 12.5px; margin-top: 6px; line-height: 1.7; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .tool { width: 34px; height: 32px; border: 1px solid #d8e1ec; border-radius: 8px; background: #fff; color: #344054; font-weight: 800; cursor: pointer; }
+    .checks { display: grid; gap: 10px; color: #526174; font-size: 13.5px; }
+    .checks input { width: auto; margin-right: 6px; }
+    .pager { margin-top: 18px; display: flex; justify-content: space-between; gap: 12px; }
+    .pager a { padding: 10px 14px; border: 1px solid #d8e1ec; border-radius: 8px; background: #fff; color: #334155; font-size: 13px; }
+    @media (max-width: 980px) { aside { display: none; } .layout { grid-template-columns: 1fr; } main { padding: 20px; } }
+  </style>
+</head>
+<body>
+  <aside>
+    <div class="brand">墨丘后台</div>
+    <div class="nav">
+      <div class="nav-title">工作台</div>
+      <a href="ui_admin_dashboard.html">仪表盘</a>
+      <a class="active" href="ui_admin_posts.html">文章管理</a>
+      <a href="ui_admin_comments.html">评论管理</a>
+      <a href="ui_admin_settings.html">站点设置</a>
+      <div class="nav-title">预览</div>
+      <a href="ui_home.html">前台首页</a>
+      <a href="index.html">返回总控台</a>
+    </div>
+  </aside>
+  <main>
+    <div class="top">
+      <div><h1>编辑文章</h1><p class="sub">编辑正文、摘要、分类、标签和发布状态。</p></div>
+      <div><a class="btn" href="index.html">返回总控台</a> <a class="btn">保存草稿</a> <a class="btn primary">发布文章</a></div>
+    </div>
+    <section class="layout">
+      <div class="card">
+        <label>文章标题</label>
+        <input value="一个小型内容系统从 0 到 1 的架构取舍">
+        <label>文章摘要</label>
+        <textarea class="summary">从页面、接口、数据库和发布流程四个层面拆解博客系统，记录为什么首版应该优先保证内容闭环。</textarea>
+        <label>正文内容</label>
+        <div class="toolbar"><button class="tool">B</button><button class="tool">I</button><button class="tool">H</button><button class="tool">"</button><button class="tool">#</button><button class="tool">@</button></div>
+        <textarea class="content">一个博客系统看起来简单，但真正落地时会同时牵涉内容模型、发布状态、评论审核、检索体验和后台权限。
+
+## 先确定内容边界
+
+文章是系统的中心对象。围绕文章需要设计分类、标签、摘要、封面、发布时间、阅读量和发布状态。</textarea>
+        <p class="hint">原型展示 Markdown 编辑形态。正式开发时会增加预览、字数统计和自动保存。</p>
+      </div>
+      <aside class="card" style="min-width:0;">
+        <label>发布状态</label>
+        <select><option>已发布</option><option>草稿</option><option>定时发布</option></select>
+        <label>分类</label>
+        <select><option>工程实践</option><option>产品复盘</option><option>内容运营</option></select>
+        <label>标签</label>
+        <input value="架构, Node.js, MySQL">
+        <label>URL 标识</label>
+        <input value="content-system-architecture">
+        <label>封面图地址</label>
+        <input value="https://images.unsplash.com/photo-1555066931-4365d14bab8c">
+        <label>SEO 关键词</label>
+        <input value="博客系统, 内容系统, 架构设计">
+        <label>发布选项</label>
+        <div class="checks">
+          <span><input type="checkbox" checked>允许评论</span>
+          <span><input type="checkbox" checked>首页推荐</span>
+          <span><input type="checkbox">置顶文章</span>
+        </div>
+        <div style="display:grid; gap:10px; margin-top:18px;"><a class="btn primary">保存并发布</a><a class="btn">预览文章</a><a class="btn danger">删除文章</a></div>
+      </aside>
+    </section>
+    <div class="pager"><a href="ui_admin_posts.html">上一页：文章管理</a><a href="ui_admin_comments.html">下一页：评论管理</a></div>
+  </main>
+</body>
+</html>

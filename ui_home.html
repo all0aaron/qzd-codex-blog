@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>前台首页 - 墨丘博客系统</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #f5f7fa; color: #172033; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
+    a { color: inherit; text-decoration: none; }
+    .topbar { position: sticky; top: 0; z-index: 10; background: rgba(255,255,255,.94); border-bottom: 1px solid #e6ebf1; backdrop-filter: blur(14px); }
+    .nav { max-width: 1180px; margin: 0 auto; height: 64px; display: flex; align-items: center; justify-content: space-between; padding: 0 22px; }
+    .logo { font-weight: 800; font-size: 19px; color: #172033; }
+    .menu { display: flex; gap: 22px; color: #536174; font-size: 14px; }
+    .back { color: #0f766e; font-weight: 700; font-size: 13px; }
+    .hero {
+      min-height: 430px;
+      display: grid;
+      align-items: end;
+      background:
+        linear-gradient(90deg, rgba(15, 23, 42, .86), rgba(15, 23, 42, .42)),
+        url("https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1600&q=82") center/cover;
+      color: #fff;
+    }
+    .hero-inner { max-width: 1180px; width: 100%; margin: 0 auto; padding: 70px 22px 54px; }
+    .kicker { color: #7dd3fc; font-size: 13px; font-weight: 800; margin-bottom: 10px; }
+    h1 { max-width: 760px; font-size: 44px; line-height: 1.15; letter-spacing: 0; margin-bottom: 16px; }
+    .hero p { max-width: 680px; color: #d8e2ee; line-height: 1.8; font-size: 15px; }
+    .search { display: flex; max-width: 560px; margin-top: 24px; background: #fff; border-radius: 8px; overflow: hidden; }
+    .search input { flex: 1; border: 0; padding: 15px 16px; font-size: 14px; outline: 0; }
+    .search button { border: 0; background: #0f766e; color: #fff; padding: 0 22px; font-weight: 800; cursor: pointer; }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 26px 22px 40px; display: grid; grid-template-columns: 1fr 310px; gap: 22px; }
+    .section-title { display: flex; align-items: center; justify-content: space-between; margin: 8px 0 14px; }
+    .section-title h2 { font-size: 20px; }
+    .article { display: grid; grid-template-columns: 210px 1fr; gap: 18px; background: #fff; border: 1px solid #e6ebf1; border-radius: 8px; padding: 14px; margin-bottom: 14px; }
+    .article img { width: 100%; height: 142px; object-fit: cover; border-radius: 6px; }
+    .article h3 { font-size: 19px; margin: 4px 0 8px; }
+    .meta { color: #7b8798; font-size: 12.5px; display: flex; gap: 12px; flex-wrap: wrap; }
+    .article p { color: #4f5f73; font-size: 14px; line-height: 1.8; margin: 9px 0 12px; }
+    .tag { display: inline-flex; padding: 4px 8px; border-radius: 999px; background: #edfdfb; color: #0f766e; font-size: 12px; margin-right: 6px; }
+    .side-card { background: #fff; border: 1px solid #e6ebf1; border-radius: 8px; padding: 18px; margin-bottom: 14px; }
+    .side-card h3 { font-size: 16px; margin-bottom: 12px; }
+    .author { display: flex; gap: 12px; align-items: center; }
+    .author img { width: 58px; height: 58px; border-radius: 50%; object-fit: cover; }
+    .side-card p, .side-card li { color: #526174; font-size: 13.5px; line-height: 1.8; }
+    .cat { display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid #eef2f6; color: #526174; font-size: 13.5px; }
+    .pager { margin-top: 18px; display: flex; justify-content: space-between; gap: 12px; }
+    .pager a { padding: 10px 14px; border: 1px solid #d8e1ec; border-radius: 8px; background: #fff; color: #334155; font-size: 13px; }
+    @media (max-width: 880px) {
+      .menu { display: none; }
+      h1 { font-size: 34px; }
+      .wrap { grid-template-columns: 1fr; }
+      .article { grid-template-columns: 1fr; }
+      .article img { height: 210px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="nav">
+      <a class="logo" href="ui_home.html">墨丘</a>
+      <div class="menu"><a>首页</a><a>文章</a><a>归档</a><a>关于</a></div>
+      <a class="back" href="index.html">返回总控台</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="kicker">写作 / 工程 / 独立创造</div>
+      <h1>记录产品、代码与长期思考</h1>
+      <p>墨丘博客聚合技术实践、产品复盘和个人知识库内容，帮助读者从真实项目中获得可复用的经验。</p>
+      <div class="search"><input value="" placeholder="搜索文章、标签或专题"><button>搜索</button></div>
+    </div>
+  </section>
+
+  <main class="wrap">
+    <section>
+      <div class="section-title"><h2>最新文章</h2><span class="meta">共 128 篇</span></div>
+      <article class="article">
+        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=600&q=80" alt="代码编辑器">
+        <div>
+          <div class="meta"><span>2026-06-12</span><span>工程实践</span><span>8 分钟阅读</span></div>
+          <h3><a href="ui_post_detail.html">一个小型内容系统从 0 到 1 的架构取舍</a></h3>
+          <p>从页面、接口、数据库和发布流程四个层面拆解博客系统，记录为什么首版应该优先保证内容闭环。</p>
+          <span class="tag">架构</span><span class="tag">Node.js</span><span class="tag">MySQL</span>
+        </div>
+      </article>
+      <article class="article">
+        <img src="https://images.unsplash.com/photo-1456324504439-367cee3b3c32?auto=format&fit=crop&w=600&q=80" alt="写作桌面">
+        <div>
+          <div class="meta"><span>2026-06-08</span><span>内容运营</span><span>6 分钟阅读</span></div>
+          <h3>如何设计一个不会变成杂物间的标签系统</h3>
+          <p>标签不是越多越好，命名、合并、颜色和归档策略会直接影响读者查找内容的效率。</p>
+          <span class="tag">标签</span><span class="tag">信息架构</span>
+        </div>
+      </article>
+      <article class="article">
+        <img src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=600&q=80" alt="工作空间">
+        <div>
+          <div class="meta"><span>2026-05-29</span><span>产品复盘</span><span>10 分钟阅读</span></div>
+          <h3>后台管理页为什么要先服务高频动作</h3>
+          <p>文章发布、评论审核和站点配置的动线决定后台是否真正可用，装饰性模块应该让位给核心动作。</p>
+          <span class="tag">后台设计</span><span class="tag">效率</span>
+        </div>
+      </article>
+      <div class="pager"><a href="index.html">上一页：总控台</a><a href="ui_post_detail.html">下一页：文章详情</a></div>
+    </section>
+
+    <aside>
+      <div class="side-card">
+        <div class="author">
+          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80" alt="作者头像">
+          <div><h3>秦知远</h3><p>产品工程师，关注内容系统、自动化工具和长期写作。</p></div>
+        </div>
+      </div>
+      <div class="side-card">
+        <h3>分类</h3>
+        <div class="cat"><span>工程实践</span><b>42</b></div>
+        <div class="cat"><span>产品复盘</span><b>31</b></div>
+        <div class="cat"><span>内容运营</span><b>24</b></div>
+        <div class="cat"><span>生活记录</span><b>18</b></div>
+      </div>
+      <div class="side-card">
+        <h3>热门标签</h3>
+        <span class="tag">架构</span><span class="tag">写作</span><span class="tag">MySQL</span><span class="tag">效率</span><span class="tag">复盘</span>
+      </div>
+    </aside>
+  </main>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>评论管理 - 墨丘博客系统</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { min-height: 100vh; display: flex; background: #f4f6f8; color: #172033; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
+    a { color: inherit; text-decoration: none; }
+    aside { width: 248px; min-width: 248px; background: #18212f; color: #aeb8c8; min-height: 100vh; }
+    .brand { padding: 22px 20px; border-bottom: 1px solid #263244; color: #fff; font-weight: 800; }
+    .nav-title { padding: 18px 20px 7px; font-size: 11px; color: #65758c; font-weight: 800; letter-spacing: 1px; }
+    .nav a { display: block; padding: 11px 20px; border-left: 3px solid transparent; font-size: 14px; }
+    .nav a.active, .nav a:hover { color: #fff; background: #243145; border-left-color: #38bdf8; }
+    main { flex: 1; padding: 26px 30px 44px; }
+    .top { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 18px; }
+    h1 { font-size: 25px; }
+    .sub { color: #667085; font-size: 13.5px; margin-top: 5px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 38px; padding: 0 14px; border-radius: 8px; border: 1px solid #d8e1ec; background: #fff; color: #334155; font-weight: 700; font-size: 13px; }
+    .primary { background: #0f766e; color: #fff; border-color: #0f766e; }
+    .card { background: #fff; border: 1px solid #e4eaf1; border-radius: 8px; padding: 18px; }
+    .filters { display: grid; grid-template-columns: 1fr 160px auto; gap: 10px; margin-bottom: 16px; }
+    input, select, textarea { border: 1px solid #d8e1ec; border-radius: 8px; padding: 10px 11px; font: inherit; outline: 0; background: #fff; }
+    .comment { display: grid; grid-template-columns: 1fr auto; gap: 18px; padding: 16px 0; border-bottom: 1px solid #eef2f6; }
+    .comment:last-child { border-bottom: 0; }
+    .comment h3 { font-size: 15px; margin-bottom: 6px; }
+    .comment p { color: #4f5f73; font-size: 13.5px; line-height: 1.8; margin: 5px 0; }
+    .meta { color: #7b8798; font-size: 12.5px; display: flex; gap: 12px; flex-wrap: wrap; }
+    .actions { display: flex; gap: 8px; align-items: flex-start; }
+    .pill { display: inline-flex; padding: 3px 8px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+    .green { background: #dcfce7; color: #166534; }
+    .amber { background: #fef3c7; color: #92400e; }
+    .gray { background: #eef2f6; color: #526174; }
+    .pager { margin-top: 18px; display: flex; justify-content: space-between; gap: 12px; }
+    .pager a { padding: 10px 14px; border: 1px solid #d8e1ec; border-radius: 8px; background: #fff; color: #334155; font-size: 13px; }
+    @media (max-width: 960px) { aside { display: none; } .filters, .comment { grid-template-columns: 1fr; } main { padding: 20px; } }
+  </style>
+</head>
+<body>
+  <aside>
+    <div class="brand">墨丘后台</div>
+    <div class="nav">
+      <div class="nav-title">工作台</div>
+      <a href="ui_admin_dashboard.html">仪表盘</a>
+      <a href="ui_admin_posts.html">文章管理</a>
+      <a class="active" href="ui_admin_comments.html">评论管理</a>
+      <a href="ui_admin_settings.html">站点设置</a>
+      <div class="nav-title">预览</div>
+      <a href="ui_home.html">前台首页</a>
+      <a href="index.html">返回总控台</a>
+    </div>
+  </aside>
+  <main>
+    <div class="top">
+      <div><h1>评论管理</h1><p class="sub">审核读者评论，隐藏不合适内容，维护文章讨论质量。</p></div>
+      <a class="btn" href="index.html">返回总控台</a>
+    </div>
+    <section class="card">
+      <div class="filters">
+        <input placeholder="搜索评论内容、昵称或邮箱" value="分类和标签">
+        <select><option>全部状态</option><option>待审核</option><option>已通过</option><option>已隐藏</option></select>
+        <a class="btn primary">筛选</a>
+      </div>
+      <div class="comment">
+        <div>
+          <h3>林北辰 <span class="pill green">已通过</span></h3>
+          <div class="meta"><span>linbeichen@example.com</span><span>2026-06-13 10:24</span><span>文章：一个小型内容系统从 0 到 1 的架构取舍</span></div>
+          <p>这篇对“分类和标签的边界”解释得很清楚，准备按这个思路整理自己的站点。</p>
+        </div>
+        <div class="actions"><a class="btn">回复</a><a class="btn">隐藏</a><a class="btn">删除</a></div>
+      </div>
+      <div class="comment">
+        <div>
+          <h3>周予安 <span class="pill green">已通过</span></h3>
+          <div class="meta"><span>zhouyuan@example.com</span><span>2026-06-13 14:48</span><span>文章：一个小型内容系统从 0 到 1 的架构取舍</span></div>
+          <p>后台高频动作优先这个点很实用，尤其是评论审核和草稿入口。</p>
+        </div>
+        <div class="actions"><a class="btn">回复</a><a class="btn">隐藏</a><a class="btn">删除</a></div>
+      </div>
+      <div class="comment">
+        <div>
+          <h3>匿名读者 <span class="pill amber">待审核</span></h3>
+          <div class="meta"><span>reader@example.com</span><span>2026-06-15 09:58</span><span>文章：如何设计一个不会变成杂物间的标签系统</span></div>
+          <p>能否再写一篇关于标签合并策略的文章？我现在遇到多个近义标签重复的问题。</p>
+        </div>
+        <div class="actions"><a class="btn primary">通过</a><a class="btn">隐藏</a><a class="btn">删除</a></div>
+      </div>
+      <div class="comment">
+        <div>
+          <h3>内容营销顾问 <span class="pill gray">已隐藏</span></h3>
+          <div class="meta"><span>promo@example.com</span><span>2026-06-14 20:17</span><span>文章：后台管理页为什么要先服务高频动作</span></div>
+          <p>这是一条已隐藏的推广评论，前台不会展示。</p>
+        </div>
+        <div class="actions"><a class="btn">恢复</a><a class="btn">删除</a></div>
+      </div>
+    </section>
+    <div class="pager"><a href="ui_admin_editor.html">上一页：文章编辑</a><a href="ui_admin_settings.html">下一页：站点设置</a></div>
+  </main>
+</body>
+</html>

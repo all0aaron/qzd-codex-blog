@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>文章详情 - 墨丘博客系统</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #f5f7fa; color: #172033; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
+    a { color: inherit; text-decoration: none; }
+    .topbar { position: sticky; top: 0; z-index: 10; background: rgba(255,255,255,.95); border-bottom: 1px solid #e6ebf1; }
+    .nav { max-width: 1160px; margin: 0 auto; height: 64px; display: flex; align-items: center; justify-content: space-between; padding: 0 22px; }
+    .logo { font-weight: 800; font-size: 19px; }
+    .back { color: #0f766e; font-weight: 700; font-size: 13px; }
+    .cover { min-height: 360px; display: grid; align-items: end; color: #fff; background: linear-gradient(180deg, rgba(15,23,42,.2), rgba(15,23,42,.9)), url("https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1600&q=82") center/cover; }
+    .cover-inner { max-width: 930px; width: 100%; margin: 0 auto; padding: 54px 22px; }
+    .meta { color: #cbd5e1; font-size: 13px; display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 12px; }
+    h1 { font-size: 42px; line-height: 1.18; letter-spacing: 0; max-width: 830px; }
+    .wrap { max-width: 1160px; margin: 0 auto; padding: 26px 22px 42px; display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 24px; }
+    article, .card { background: #fff; border: 1px solid #e6ebf1; border-radius: 8px; }
+    article { padding: 30px; }
+    article p { color: #3f4d60; font-size: 15.5px; line-height: 2; margin-bottom: 16px; }
+    article h2 { margin: 28px 0 12px; font-size: 23px; }
+    blockquote { border-left: 4px solid #0f766e; background: #f0fdfa; color: #115e59; padding: 12px 16px; border-radius: 6px; margin: 18px 0; line-height: 1.8; }
+    .tag { display: inline-flex; padding: 4px 8px; border-radius: 999px; background: #edfdfb; color: #0f766e; font-size: 12px; margin: 0 6px 6px 0; }
+    .card { padding: 17px; margin-bottom: 14px; }
+    .card h3 { font-size: 16px; margin-bottom: 12px; }
+    .toc a { display: block; color: #526174; font-size: 13.5px; padding: 7px 0; border-bottom: 1px solid #eef2f6; }
+    .comment { padding: 14px 0; border-bottom: 1px solid #eef2f6; }
+    .comment b { display: block; font-size: 14px; margin-bottom: 4px; }
+    .comment span, .comment p { color: #667085; font-size: 13px; line-height: 1.7; }
+    textarea, input { width: 100%; border: 1px solid #d7e0ea; border-radius: 8px; padding: 11px 12px; margin-bottom: 10px; font: inherit; outline: 0; }
+    textarea { min-height: 100px; resize: vertical; }
+    button { border: 0; background: #0f766e; color: #fff; padding: 11px 16px; border-radius: 8px; font-weight: 800; cursor: pointer; }
+    .pager { margin-top: 18px; display: flex; justify-content: space-between; gap: 12px; }
+    .pager a { padding: 10px 14px; border: 1px solid #d8e1ec; border-radius: 8px; background: #fff; color: #334155; font-size: 13px; }
+    @media (max-width: 900px) { .wrap { grid-template-columns: 1fr; } h1 { font-size: 32px; } article { padding: 22px; } }
+  </style>
+</head>
+<body>
+  <header class="topbar"><div class="nav"><a class="logo" href="ui_home.html">墨丘</a><a class="back" href="index.html">返回总控台</a></div></header>
+  <section class="cover">
+    <div class="cover-inner">
+      <div class="meta"><span>2026-06-12</span><span>工程实践</span><span>8 分钟阅读</span><span>2,846 次阅读</span></div>
+      <h1>一个小型内容系统从 0 到 1 的架构取舍</h1>
+    </div>
+  </section>
+  <main class="wrap">
+    <article>
+      <p>一个博客系统看起来简单，但真正落地时会同时牵涉内容模型、发布状态、评论审核、检索体验和后台权限。首版最重要的不是把功能堆满，而是让文章从创建到发布、从浏览到反馈形成稳定闭环。</p>
+      <h2>先确定内容边界</h2>
+      <p>文章是系统的中心对象。围绕文章需要设计分类、标签、摘要、封面、发布时间、阅读量和发布状态。分类解决结构化归属，标签解决横向主题关联，两者不能互相替代。</p>
+      <blockquote>首版只做核心字段，保留扩展空间，比过早引入复杂专题系统更稳妥。</blockquote>
+      <h2>后台服务高频动作</h2>
+      <p>后台首页应该优先展示待处理评论、近期文章和数据趋势，文章列表需要支持搜索、筛选和状态切换。编辑页则要把标题、摘要、正文和发布设置放在清晰的位置，降低发布成本。</p>
+      <h2>数据库保持可追踪</h2>
+      <p>所有业务表都保留创建时间、更新时间和逻辑删除字段，方便后续排查问题和恢复数据。评论默认进入待审核状态，避免前台出现未经确认的内容。</p>
+      <div><span class="tag">架构</span><span class="tag">内容系统</span><span class="tag">MySQL</span></div>
+      <div class="card" style="margin-top:24px;">
+        <h3>评论区</h3>
+        <div class="comment"><b>林北辰</b><span>2026-06-13 10:24</span><p>这篇对“分类和标签的边界”解释得很清楚，准备按这个思路整理自己的站点。</p></div>
+        <div class="comment"><b>周予安</b><span>2026-06-13 14:48</span><p>后台高频动作优先这个点很实用，尤其是评论审核和草稿入口。</p></div>
+        <input placeholder="昵称">
+        <input placeholder="邮箱">
+        <textarea placeholder="写下你的评论，审核通过后展示"></textarea>
+        <button>提交评论</button>
+      </div>
+      <div class="pager"><a href="ui_home.html">上一页：前台首页</a><a href="ui_admin_login.html">下一页：后台登录</a></div>
+    </article>
+    <aside>
+      <div class="card toc"><h3>目录</h3><a>先确定内容边界</a><a>后台服务高频动作</a><a>数据库保持可追踪</a><a>评论区</a></div>
+      <div class="card"><h3>相关文章</h3><p>如何设计一个不会变成杂物间的标签系统</p><p>后台管理页为什么要先服务高频动作</p></div>
+    </aside>
+  </main>
+</body>
+</html>

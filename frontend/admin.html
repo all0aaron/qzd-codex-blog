@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>墨丘后台管理</title>
+  <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body class="admin-body">
+  <aside class="admin-sidebar">
+    <div class="admin-brand">墨丘后台</div>
+    <nav>
+      <button class="admin-nav active" data-view="dashboard">仪表盘</button>
+      <button class="admin-nav" data-view="posts">文章管理</button>
+      <button class="admin-nav" data-view="comments">评论管理</button>
+      <button class="admin-nav" data-view="settings">站点设置</button>
+      <a class="admin-link" href="/">前台首页</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <section class="login-card" id="loginView">
+      <div class="login-visual"></div>
+      <form id="loginForm" class="login-form">
+        <h1>管理员登录</h1>
+        <p>登录后可管理文章、评论和站点设置。</p>
+        <label>账号</label>
+        <input id="loginUsername" value="admin" autocomplete="username">
+        <label>密码</label>
+        <input id="loginPassword" value="admin123" type="password" autocomplete="current-password">
+        <button type="submit" class="primary-btn">登录后台</button>
+        <div class="form-message" id="loginMessage"></div>
+      </form>
+    </section>
+
+    <section class="admin-workspace hidden" id="workspace">
+      <header class="admin-topbar">
+        <div>
+          <h1 id="adminTitle">仪表盘</h1>
+          <p id="adminSubtitle">站点内容运行概览</p>
+        </div>
+        <div class="admin-actions">
+          <button class="outline-btn" id="newPostBtn">新建文章</button>
+          <button class="outline-btn" id="logoutBtn">退出</button>
+        </div>
+      </header>
+
+      <section class="admin-view" id="dashboardView">
+        <div class="stats-grid" id="statsGrid"></div>
+        <div class="admin-grid">
+          <section class="panel">
+            <h2>近期文章</h2>
+            <div id="recentPosts"></div>
+          </section>
+          <section class="panel">
+            <h2>待审核评论</h2>
+            <div id="pendingComments"></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="admin-view hidden" id="postsView">
+        <div class="filter-row">
+          <input id="adminPostKeyword" placeholder="搜索标题或摘要">
+          <select id="adminPostStatus">
+            <option value="">全部状态</option>
+            <option value="published">已发布</option>
+            <option value="draft">草稿</option>
+          </select>
+          <button class="primary-btn" id="adminPostSearch">筛选</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>标题</th><th>分类</th><th>状态</th><th>阅读</th><th>更新时间</th><th>操作</th></tr></thead>
+            <tbody id="adminPostTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="admin-view hidden" id="editorView">
+        <form id="postForm" class="editor-grid">
+          <input type="hidden" id="postId">
+          <section class="panel">
+            <label>标题</label>
+            <input id="postTitle" required>
+            <label>摘要</label>
+            <textarea id="postSummary" rows="4" required></textarea>
+            <label>正文</label>
+            <textarea id="postContent" rows="16" required></textarea>
+          </section>
+          <section class="panel">
+            <label>URL 标识</label>
+            <input id="postSlug" required>
+            <label>分类</label>
+            <select id="postCategory"></select>
+            <label>标签，用英文逗号分隔</label>
+            <input id="postTags">
+            <label>封面图地址</label>
+            <input id="postCover">
+            <label>状态</label>
+            <select id="postStatus">
+              <option value="draft">草稿</option>
+              <option value="published">已发布</option>
+            </select>
+            <label class="checkline"><input type="checkbox" id="postFeatured"> 首页推荐</label>
+            <div class="stack-actions">
+              <button class="primary-btn" type="submit">保存文章</button>
+              <button class="outline-btn" type="button" id="cancelEdit">返回列表</button>
+            </div>
+            <div class="form-message" id="postMessage"></div>
+          </section>
+        </form>
+      </section>
+
+      <section class="admin-view hidden" id="commentsView">
+        <div id="commentList" class="comment-admin-list"></div>
+      </section>
+
+      <section class="admin-view hidden" id="settingsView">
+        <form id="settingsForm" class="editor-grid">
+          <section class="panel">
+            <label>站点名称</label>
+            <input id="settingSiteName" required>
+            <label>站点标题</label>
+            <input id="settingSiteTitle" required>
+            <label>站点描述</label>
+            <textarea id="settingSiteDescription" rows="5" required></textarea>
+            <label>SEO 关键词</label>
+            <input id="settingKeywords">
+          </section>
+          <section class="panel">
+            <label>作者名称</label>
+            <input id="settingAuthorName" required>
+            <label>作者简介</label>
+            <textarea id="settingAuthorBio" rows="5" required></textarea>
+            <label>作者头像</label>
+            <input id="settingAuthorAvatar">
+            <button class="primary-btn" type="submit">保存设置</button>
+            <div class="form-message" id="settingsMessage"></div>
+          </section>
+        </form>
+      </section>
+    </section>
+  </main>
+
+  <script src="/assets/admin.js"></script>
+</body>
+</html>

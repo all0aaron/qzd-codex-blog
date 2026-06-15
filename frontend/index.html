@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>墨丘 - 产品、代码与长期思考</title>
+  <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="topline"></div>
+    <nav class="site-nav">
+      <a class="site-logo" href="/">墨丘</a>
+      <div class="site-links">
+        <a href="#home">首页</a>
+        <a href="#archive">归档</a>
+        <a href="#about">关于</a>
+        <a href="/admin">后台</a>
+      </div>
+      <button class="icon-menu" id="mobileMenu" title="菜单">☰</button>
+    </nav>
+  </header>
+
+  <section class="front-hero" id="home">
+    <div class="front-hero-inner">
+      <div class="eyebrow">写作 / 工程 / 独立创造</div>
+      <h1 id="siteTitle">记录产品、代码与长期思考</h1>
+      <p id="siteDescription">墨丘博客聚合技术实践、产品复盘和个人知识库内容，帮助读者从真实项目中获得可复用的经验。</p>
+      <form class="search-bar" id="searchForm">
+        <input id="keywordInput" placeholder="搜索文章、标签或专题">
+        <button type="submit">搜索</button>
+      </form>
+    </div>
+  </section>
+
+  <main class="front-shell">
+    <section class="post-area">
+      <div class="section-toolbar">
+        <div>
+          <h2 id="listTitle">最新文章</h2>
+          <p id="listSummary">正在加载文章内容</p>
+        </div>
+        <button class="outline-btn" id="clearFilter">清除筛选</button>
+      </div>
+      <div class="post-list" id="postList"></div>
+      <article class="post-detail hidden" id="postDetail"></article>
+    </section>
+
+    <aside class="front-sidebar">
+      <section class="panel author-panel">
+        <img id="authorAvatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80" alt="作者头像">
+        <div>
+          <h3 id="authorName">秦知远</h3>
+          <p id="authorBio">产品工程师，关注内容系统、自动化工具和长期写作。</p>
+        </div>
+      </section>
+      <section class="panel" id="categoryPanel">
+        <h3>分类</h3>
+        <div id="categoryList" class="category-list"></div>
+      </section>
+      <section class="panel">
+        <h3>热门标签</h3>
+        <div id="tagList" class="tag-cloud"></div>
+      </section>
+      <section class="panel" id="about">
+        <h3>关于本站</h3>
+        <p>这里持续记录工程实践、产品判断和内容系统搭建过程，文章来自真实项目复盘。</p>
+      </section>
+    </aside>
+  </main>
+
+  <footer class="site-footer" id="archive">
+    <span>墨丘博客系统</span>
+    <span>前台文章、评论和设置均来自 8942 API</span>
+  </footer>
+
+  <script src="/assets/app.js"></script>
+</body>
+</html>

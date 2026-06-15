@@ -1,0 +1,136 @@
+{
+  "settings": {
+    "siteName": "墨丘",
+    "siteTitle": "墨丘 - 产品、代码与长期思考",
+    "siteDescription": "墨丘博客聚合技术实践、产品复盘和个人知识库内容，帮助读者从真实项目中获得可复用的经验。",
+    "keywords": "博客, 产品复盘, 工程实践, 内容系统",
+    "authorName": "秦知远",
+    "authorBio": "产品工程师，关注内容系统、自动化工具和长期写作。",
+    "authorAvatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80"
+  },
+  "admins": [
+    { "id": 1, "username": "admin", "password": "admin123", "role": "admin", "status": "enabled" }
+  ],
+  "categories": [
+    { "id": 1, "name": "工程实践", "slug": "engineering", "description": "项目开发、架构和代码实践", "sortOrder": 1 },
+    { "id": 2, "name": "产品复盘", "slug": "product-review", "description": "产品设计、业务流程和体验复盘", "sortOrder": 2 },
+    { "id": 3, "name": "内容运营", "slug": "content-ops", "description": "写作、标签和内容组织", "sortOrder": 3 },
+    { "id": 4, "name": "生活记录", "slug": "life-notes", "description": "工作之外的观察和记录", "sortOrder": 4 }
+  ],
+  "tags": [
+    { "id": 1, "name": "架构", "slug": "architecture", "color": "#0f766e" },
+    { "id": 2, "name": "Node.js", "slug": "nodejs", "color": "#2563eb" },
+    { "id": 3, "name": "MySQL", "slug": "mysql", "color": "#b45309" },
+    { "id": 4, "name": "写作", "slug": "writing", "color": "#7c3aed" },
+    { "id": 5, "name": "后台设计", "slug": "admin-design", "color": "#0f172a" },
+    { "id": 6, "name": "信息架构", "slug": "information-architecture", "color": "#be123c" }
+  ],
+  "posts": [
+    {
+      "id": 1,
+      "title": "一个小型内容系统从 0 到 1 的架构取舍",
+      "slug": "content-system-architecture",
+      "summary": "从页面、接口、数据库和发布流程四个层面拆解博客系统，记录为什么首版应该优先保证内容闭环。",
+      "content": "一个博客系统看起来简单，但真正落地时会同时牵涉内容模型、发布状态、评论审核、检索体验和后台权限。\n\n## 先确定内容边界\n文章是系统的中心对象。围绕文章需要设计分类、标签、摘要、封面、发布时间、阅读量和发布状态。分类解决结构化归属，标签解决横向主题关联，两者不能互相替代。\n\n## 后台服务高频动作\n后台首页应该优先展示待处理评论、近期文章和数据趋势，文章列表需要支持搜索、筛选和状态切换。编辑页则要把标题、摘要、正文和发布设置放在清晰的位置，降低发布成本。\n\n## 数据库保持可追踪\n所有业务表都保留创建时间、更新时间和逻辑删除字段，方便后续排查问题和恢复数据。评论默认进入待审核状态，避免前台出现未经确认的内容。",
+      "coverUrl": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=900&q=80",
+      "categoryId": 1,
+      "tagIds": [1, 2, 3],
+      "status": "published",
+      "featured": true,
+      "readCount": 2846,
+      "publishTime": "2026-06-12T10:18:00.000Z",
+      "createTime": "2026-06-10T09:30:00.000Z",
+      "updateTime": "2026-06-12T10:18:00.000Z",
+      "isDeleted": false
+    },
+    {
+      "id": 2,
+      "title": "如何设计一个不会变成杂物间的标签系统",
+      "slug": "tag-system-design",
+      "summary": "标签不是越多越好，命名、合并、颜色和归档策略会直接影响读者查找内容的效率。",
+      "content": "标签系统的目标不是展示数量，而是帮助读者在不同文章之间建立主题连接。\n\n命名应该使用稳定词汇，避免同义词重复。每月可以做一次标签合并，把低频、含义接近的标签收敛到更清晰的主题下。\n\n后台应当展示每个标签的文章数量，帮助管理员发现长期无人使用的标签。",
+      "coverUrl": "https://images.unsplash.com/photo-1456324504439-367cee3b3c32?auto=format&fit=crop&w=900&q=80",
+      "categoryId": 3,
+      "tagIds": [4, 6],
+      "status": "published",
+      "featured": false,
+      "readCount": 1982,
+      "publishTime": "2026-06-08T21:06:00.000Z",
+      "createTime": "2026-06-07T15:30:00.000Z",
+      "updateTime": "2026-06-08T21:06:00.000Z",
+      "isDeleted": false
+    },
+    {
+      "id": 3,
+      "title": "后台管理页为什么要先服务高频动作",
+      "slug": "admin-high-frequency-actions",
+      "summary": "文章发布、评论审核和站点配置的动线决定后台是否真正可用，装饰性模块应该让位给核心动作。",
+      "content": "后台不是展示页面，而是工作台。真正高频的动作包括新建文章、保存草稿、发布、审核评论和查看异常状态。\n\n首屏应该把这些入口放在用户不用思考的位置。统计数据可以存在，但不能抢走操作入口的权重。",
+      "coverUrl": "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=900&q=80",
+      "categoryId": 2,
+      "tagIds": [5, 6],
+      "status": "published",
+      "featured": true,
+      "readCount": 1260,
+      "publishTime": "2026-06-14T16:30:00.000Z",
+      "createTime": "2026-06-13T11:00:00.000Z",
+      "updateTime": "2026-06-14T16:30:00.000Z",
+      "isDeleted": false
+    },
+    {
+      "id": 4,
+      "title": "一次评论审核策略调整记录",
+      "slug": "comment-review-policy",
+      "summary": "记录从开放评论到审核评论的策略变化，以及后台如何降低处理成本。",
+      "content": "评论系统应该默认保护前台内容质量。未审核评论进入待处理列表，管理员通过后再展示。\n\n如果后续评论量增长，可以加入敏感词、邮箱黑名单和频率限制。",
+      "coverUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80",
+      "categoryId": 3,
+      "tagIds": [4, 5],
+      "status": "draft",
+      "featured": false,
+      "readCount": 0,
+      "publishTime": null,
+      "createTime": "2026-06-15T09:22:00.000Z",
+      "updateTime": "2026-06-15T09:22:00.000Z",
+      "isDeleted": false
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "postId": 1,
+      "nickname": "林北辰",
+      "email": "linbeichen@example.com",
+      "content": "这篇对“分类和标签的边界”解释得很清楚，准备按这个思路整理自己的站点。",
+      "status": "approved",
+      "replyContent": "",
+      "createTime": "2026-06-13T10:24:00.000Z",
+      "updateTime": "2026-06-13T10:35:00.000Z",
+      "isDeleted": false
+    },
+    {
+      "id": 2,
+      "postId": 1,
+      "nickname": "周予安",
+      "email": "zhouyuan@example.com",
+      "content": "后台高频动作优先这个点很实用，尤其是评论审核和草稿入口。",
+      "status": "approved",
+      "replyContent": "是的，后台首屏应该优先服务日常动作。",
+      "createTime": "2026-06-13T14:48:00.000Z",
+      "updateTime": "2026-06-13T15:02:00.000Z",
+      "isDeleted": false
+    },
+    {
+      "id": 3,
+      "postId": 2,
+      "nickname": "匿名读者",
+      "email": "reader@example.com",
+      "content": "能否再写一篇关于标签合并策略的文章？我现在遇到多个近义标签重复的问题。",
+      "status": "pending",
+      "replyContent": "",
+      "createTime": "2026-06-15T09:58:00.000Z",
+      "updateTime": "2026-06-15T09:58:00.000Z",
+      "isDeleted": false
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>文章管理 - 墨丘博客系统</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { min-height: 100vh; display: flex; background: #f4f6f8; color: #172033; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
+    a { color: inherit; text-decoration: none; }
+    aside { width: 248px; min-width: 248px; background: #18212f; color: #aeb8c8; min-height: 100vh; }
+    .brand { padding: 22px 20px; border-bottom: 1px solid #263244; color: #fff; font-weight: 800; }
+    .nav-title { padding: 18px 20px 7px; font-size: 11px; color: #65758c; font-weight: 800; letter-spacing: 1px; }
+    .nav a { display: block; padding: 11px 20px; border-left: 3px solid transparent; font-size: 14px; }
+    .nav a.active, .nav a:hover { color: #fff; background: #243145; border-left-color: #38bdf8; }
+    main { flex: 1; padding: 26px 30px 44px; }
+    .top { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 18px; }
+    h1 { font-size: 25px; }
+    .sub { color: #667085; font-size: 13.5px; margin-top: 5px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 38px; padding: 0 14px; border-radius: 8px; border: 1px solid #d8e1ec; background: #fff; color: #334155; font-weight: 700; font-size: 13px; }
+    .primary { background: #0f766e; color: #fff; border-color: #0f766e; }
+    .card { background: #fff; border: 1px solid #e4eaf1; border-radius: 8px; padding: 18px; }
+    .filters { display: grid; grid-template-columns: 1fr 160px 160px auto; gap: 10px; margin-bottom: 16px; }
+    input, select { border: 1px solid #d8e1ec; border-radius: 8px; padding: 10px 11px; font: inherit; outline: 0; background: #fff; }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; color: #667085; font-size: 12px; padding: 10px 8px; border-bottom: 1px solid #eef2f6; }
+    td { color: #344054; font-size: 13.5px; padding: 13px 8px; border-bottom: 1px solid #eef2f6; line-height: 1.6; vertical-align: middle; }
+    .title { font-weight: 800; color: #172033; }
+    .muted { color: #7b8798; font-size: 12.5px; }
+    .pill { display: inline-flex; padding: 3px 8px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+    .green { background: #dcfce7; color: #166534; }
+    .blue { background: #dbeafe; color: #1d4ed8; }
+    .amber { background: #fef3c7; color: #92400e; }
+    .actions { display: flex; gap: 8px; }
+    .actions a { color: #0f766e; font-weight: 700; font-size: 13px; }
+    .pager { margin-top: 18px; display: flex; justify-content: space-between; gap: 12px; }
+    .pager a { padding: 10px 14px; border: 1px solid #d8e1ec; border-radius: 8px; background: #fff; color: #334155; font-size: 13px; }
+    @media (max-width: 960px) { aside { display: none; } .filters { grid-template-columns: 1fr; } main { padding: 20px; overflow-x: auto; } }
+  </style>
+</head>
+<body>
+  <aside>
+    <div class="brand">墨丘后台</div>
+    <div class="nav">
+      <div class="nav-title">工作台</div>
+      <a href="ui_admin_dashboard.html">仪表盘</a>
+      <a class="active" href="ui_admin_posts.html">文章管理</a>
+      <a href="ui_admin_comments.html">评论管理</a>
+      <a href="ui_admin_settings.html">站点设置</a>
+      <div class="nav-title">预览</div>
+      <a href="ui_home.html">前台首页</a>
+      <a href="index.html">返回总控台</a>
+    </div>
+  </aside>
+  <main>
+    <div class="top">
+      <div><h1>文章管理</h1><p class="sub">管理文章的草稿、发布、定时发布和下架状态。</p></div>
+      <div><a class="btn" href="index.html">返回总控台</a> <a class="btn primary" href="ui_admin_editor.html">新建文章</a></div>
+    </div>
+    <section class="card">
+      <div class="filters">
+        <input placeholder="搜索标题、摘要或标签" value="内容系统">
+        <select><option>全部分类</option><option>工程实践</option><option>产品复盘</option></select>
+        <select><option>全部状态</option><option>已发布</option><option>草稿</option><option>定时发布</option></select>
+        <a class="btn primary">筛选</a>
+      </div>
+      <table>
+        <thead><tr><th>文章</th><th>分类</th><th>状态</th><th>阅读/评论</th><th>更新时间</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr><td><div class="title">一个小型内容系统从 0 到 1 的架构取舍</div><div class="muted">slug: content-system-architecture</div></td><td>工程实践</td><td><span class="pill green">已发布</span></td><td>2,846 / 18</td><td>2026-06-12 10:18</td><td><div class="actions"><a href="ui_admin_editor.html">编辑</a><a>下架</a><a>删除</a></div></td></tr>
+          <tr><td><div class="title">如何设计一个不会变成杂物间的标签系统</div><div class="muted">slug: tag-system-design</div></td><td>内容运营</td><td><span class="pill green">已发布</span></td><td>1,982 / 9</td><td>2026-06-08 21:06</td><td><div class="actions"><a href="ui_admin_editor.html">编辑</a><a>下架</a><a>删除</a></div></td></tr>
+          <tr><td><div class="title">后台管理页为什么要先服务高频动作</div><div class="muted">slug: admin-high-frequency-actions</div></td><td>产品复盘</td><td><span class="pill blue">定时发布</span></td><td>0 / 0</td><td>2026-06-14 16:30</td><td><div class="actions"><a href="ui_admin_editor.html">编辑</a><a>立即发布</a><a>删除</a></div></td></tr>
+          <tr><td><div class="title">一次评论审核策略调整记录</div><div class="muted">slug: comment-review-policy</div></td><td>运营记录</td><td><span class="pill amber">草稿</span></td><td>0 / 0</td><td>2026-06-15 09:22</td><td><div class="actions"><a href="ui_admin_editor.html">编辑</a><a>发布</a><a>删除</a></div></td></tr>
+        </tbody>
+      </table>
+    </section>
+    <div class="pager"><a href="ui_admin_dashboard.html">上一页：后台仪表盘</a><a href="ui_admin_editor.html">下一页：文章编辑</a></div>
+  </main>
+</body>
+</html>

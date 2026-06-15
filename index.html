@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>墨丘博客系统 - 项目总控台</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      display: flex;
+      background: #f4f6f8;
+      color: #172033;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    a { color: inherit; text-decoration: none; }
+    #sidebar {
+      position: fixed;
+      inset: 0 auto 0 0;
+      width: 260px;
+      background: #18212f;
+      color: #d8dee9;
+      overflow-y: auto;
+      border-right: 1px solid #263244;
+    }
+    .brand { padding: 24px 20px 18px; border-bottom: 1px solid #263244; }
+    .brand strong { display: block; color: #fff; font-size: 18px; letter-spacing: .2px; }
+    .brand span { display: block; color: #8190a6; font-size: 12px; margin-top: 6px; line-height: 1.6; }
+    .nav-title { padding: 18px 20px 7px; font-size: 11px; color: #64748b; letter-spacing: 1.2px; font-weight: 800; }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      color: #a8b3c6;
+      border-left: 3px solid transparent;
+      font-size: 13px;
+    }
+    .nav-item:hover, .nav-item.active { color: #fff; background: #243145; border-left-color: #38bdf8; }
+    main { margin-left: 260px; width: calc(100% - 260px); padding: 30px 38px 70px; }
+    .hero {
+      min-height: 210px;
+      padding: 30px 34px;
+      border-radius: 8px;
+      background:
+        linear-gradient(120deg, rgba(15, 23, 42, .88), rgba(24, 33, 47, .73)),
+        url("https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1600&q=80") center/cover;
+      color: #fff;
+      display: grid;
+      align-content: end;
+      margin-bottom: 22px;
+    }
+    .hero h1 { font-size: 30px; line-height: 1.2; margin-bottom: 10px; font-weight: 800; letter-spacing: 0; }
+    .hero p { max-width: 760px; color: #d7dee9; line-height: 1.8; font-size: 14px; }
+    .badge-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+    .badge { padding: 5px 10px; border-radius: 999px; background: rgba(255,255,255,.13); color: #edf4ff; font-size: 12px; }
+    .section {
+      background: #fff;
+      border: 1px solid #e5eaf0;
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 18px;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, .04);
+      scroll-margin-top: 20px;
+    }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 16px;
+      margin-bottom: 18px;
+      border-bottom: 1px solid #edf1f5;
+    }
+    .section h2 { font-size: 19px; color: #121a2a; }
+    .section .sub { color: #718096; font-size: 13px; margin-top: 5px; line-height: 1.6; }
+    h3 { margin: 20px 0 10px; font-size: 15px; color: #223047; }
+    p, li, td, th { font-size: 13.5px; line-height: 1.8; }
+    p, li, td { color: #4a5568; }
+    ul { padding-left: 18px; margin: 8px 0 14px; }
+    table { width: 100%; border-collapse: collapse; margin: 12px 0; overflow: hidden; border-radius: 8px; }
+    th { background: #243145; color: #fff; text-align: left; font-weight: 700; padding: 10px 12px; }
+    td { border-bottom: 1px solid #edf1f5; padding: 10px 12px; vertical-align: top; }
+    tr:nth-child(even) td { background: #fbfcfe; }
+    code { background: #eef6ff; color: #075985; border-radius: 4px; padding: 2px 6px; font-family: Consolas, monospace; font-size: 12.5px; }
+    pre { overflow-x: auto; background: #111827; color: #dbeafe; padding: 16px; border-radius: 8px; line-height: 1.7; font-size: 12.5px; }
+    .phase-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
+    .phase {
+      border: 1px solid #e5eaf0;
+      border-radius: 8px;
+      padding: 13px;
+      background: #fbfcfe;
+      min-height: 116px;
+    }
+    .phase small { display: block; color: #718096; font-weight: 800; letter-spacing: .7px; }
+    .phase strong { display: block; margin: 7px 0 5px; font-size: 14px; color: #18212f; }
+    .status { display: inline-flex; margin-top: 10px; padding: 3px 8px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+    .done { background: #dcfce7; color: #166534; }
+    .doing { background: #dbeafe; color: #1d4ed8; }
+    .wait { background: #f1f5f9; color: #64748b; }
+    .pause { background: #fff7ed; color: #9a3412; }
+    .preview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+    .preview {
+      display: block;
+      border: 1px solid #dce4ee;
+      border-radius: 8px;
+      padding: 16px;
+      background: #fff;
+      transition: .18s ease;
+    }
+    .preview:hover { transform: translateY(-2px); border-color: #38bdf8; box-shadow: 0 8px 20px rgba(15, 23, 42, .08); }
+    .preview b { display: block; color: #172033; margin-bottom: 6px; }
+    .preview span { color: #667085; font-size: 13px; line-height: 1.6; }
+    .alert { border-left: 4px solid #f59e0b; background: #fffbeb; color: #78350f; padding: 13px 15px; border-radius: 8px; margin: 14px 0; font-size: 13.5px; line-height: 1.8; }
+    .two-col { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    @media (max-width: 900px) {
+      #sidebar { display: none; }
+      main { margin-left: 0; width: 100%; padding: 18px; }
+      .two-col { grid-template-columns: 1fr; }
+      .hero { min-height: 250px; padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <nav id="sidebar">
+    <div class="brand">
+      <strong>墨丘博客系统</strong>
+      <span>项目总控台 / 需求 / 产品 / UI 原型<br>更新日期：2026-06-15</span>
+    </div>
+    <div class="nav-title">项目</div>
+    <a class="nav-item active" href="#overview">项目概览</a>
+    <a class="nav-item" href="#progress">阶段进度</a>
+    <a class="nav-item" href="#phase0">PHASE 0 需求分析</a>
+    <a class="nav-item" href="#phase1">PHASE 1 产品设计</a>
+    <a class="nav-item" href="#phase2">PHASE 2 UI 预览</a>
+    <div class="nav-title">后续设计</div>
+    <a class="nav-item" href="#database">数据库设计草案</a>
+    <a class="nav-item" href="#api">API 草案</a>
+    <a class="nav-item" href="#summary">当前总结</a>
+  </nav>
+
+  <main>
+    <section class="hero" id="overview">
+      <div>
+        <h1>墨丘博客系统</h1>
+        <p>面向个人创作者和小团队的内容发布系统，包含公开博客前台与后台管理端。当前已按序章要求完成 PHASE 0、PHASE 1，并生成 PHASE 2 HTML UI 原型；等待确认后再进入正式前端与后端开发。</p>
+        <div class="badge-row">
+          <span class="badge">前台博客</span>
+          <span class="badge">后台管理</span>
+          <span class="badge">MySQL 设计</span>
+          <span class="badge">纯 HTML 原型</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="progress">
+      <div class="section-head">
+        <div>
+          <h2>阶段进度看板</h2>
+          <div class="sub">严格按序章流程推进，UI 原型确认前不进入 PHASE 3。</div>
+        </div>
+      </div>
+      <div class="phase-grid">
+        <div class="phase"><small>PHASE 0</small><strong>需求分析</strong><p>拆解功能、角色、技术方向。</p><span class="status done">已完成</span></div>
+        <div class="phase"><small>PHASE 1</small><strong>产品设计</strong><p>输出产品需求文档。</p><span class="status done">已完成</span></div>
+        <div class="phase"><small>PHASE 2</small><strong>UI 设计</strong><p>生成 HTML 原型并等待确认。</p><span class="status pause">等待确认</span></div>
+        <div class="phase"><small>PHASE 3</small><strong>前端开发</strong><p>确认 UI 后实现页面。</p><span class="status wait">待开始</span></div>
+        <div class="phase"><small>PHASE 4</small><strong>后端开发</strong><p>实现接口和鉴权。</p><span class="status wait">待开始</span></div>
+        <div class="phase"><small>PHASE 5</small><strong>数据库设计</strong><p>生成 MySQL 建表 SQL。</p><span class="status wait">待开始</span></div>
+        <div class="phase"><small>PHASE 6</small><strong>测试</strong><p>接口与功能测试。</p><span class="status wait">待开始</span></div>
+        <div class="phase"><small>PHASE 7</small><strong>项目总结</strong><p>启动说明和问题记录。</p><span class="status wait">待开始</span></div>
+        <div class="phase"><small>PHASE 8</small><strong>部署上线</strong><p>打包和部署说明。</p><span class="status wait">待开始</span></div>
+      </div>
+    </section>
+
+    <section class="section" id="phase0">
+      <div class="section-head">
+        <div>
+          <h2>PHASE 0 需求分析</h2>
+          <div class="sub">提出日期：2026-06-15。目标是开发一个有前台和后台的博客系统网站。</div>
+        </div>
+        <span class="status done">已完成</span>
+      </div>
+
+      <h3>项目定位</h3>
+      <p>系统用于发布、管理和浏览长文章内容，重点服务个人博客、知识沉淀、项目日志、技术文章和专题内容运营。前台强调阅读体验、检索效率和内容发现；后台强调文章生产、发布控制、评论治理和站点配置。</p>
+
+      <h3>角色拆解</h3>
+      <table>
+        <thead><tr><th>角色</th><th>核心诉求</th><th>主要权限</th></tr></thead>
+        <tbody>
+          <tr><td>游客</td><td>浏览文章、搜索内容、查看分类标签和文章详情。</td><td>访问公开内容，提交评论需填写昵称和邮箱。</td></tr>
+          <tr><td>管理员</td><td>高效写作、发布文章、管理评论、维护站点信息。</td><td>文章、分类、标签、评论、友链、站点设置全量管理。</td></tr>
+          <tr><td>编辑</td><td>撰写草稿、维护内容质量。</td><td>创建和编辑文章，提交发布，查看评论。</td></tr>
+        </tbody>
+      </table>
+
+      <h3>功能模块</h3>
+      <div class="two-col">
+        <div>
+          <h3>前台模块</h3>
+          <ul>
+            <li>首页：精选文章、最新文章、热门标签、作者信息、订阅入口。</li>
+            <li>文章列表：按分类、标签、关键字、发布时间筛选。</li>
+            <li>文章详情：正文阅读、目录、相关文章、评论区、上一篇/下一篇。</li>
+            <li>归档页：按年月聚合文章，便于查找历史内容。</li>
+            <li>关于页：作者介绍、联系方式、站点说明。</li>
+          </ul>
+        </div>
+        <div>
+          <h3>后台模块</h3>
+          <ul>
+            <li>登录鉴权：管理员登录、退出、会话保护。</li>
+            <li>仪表盘：文章数、阅读量、评论状态、近期内容概览。</li>
+            <li>文章管理：列表、搜索、筛选、新建、编辑、发布、下架、删除。</li>
+            <li>分类标签：维护分类、标签和内容归属。</li>
+            <li>评论管理：审核、隐藏、删除、回复。</li>
+            <li>站点设置：站点标题、简介、作者资料、SEO 信息。</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3>技术方向</h3>
+      <p>博客系统首版适合采用轻量 Web 架构：前端使用原生 HTML/CSS/JavaScript 或 Vue 轻量实现，后台 API 使用 Node.js 或 Java Spring Boot，数据库固定使用 MySQL。由于序章要求后端端口固定为 8080，后续 PHASE 4 将以 8080 提供 API 服务。</p>
+      <p>当前阶段只做 UI 原型，不提前写正式业务代码。确认 UI 后，建议 PHASE 3/4 使用 Node.js 原生或 Express 风格 API，便于快速落地；数据库阶段输出 `blog_db` 的 MySQL 建表脚本。</p>
+    </section>
+
+    <section class="section" id="phase1">
+      <div class="section-head">
+        <div>
+          <h2>PHASE 1 产品设计</h2>
+          <div class="sub">完整产品需求文档，后续开发以此为准。</div>
+        </div>
+        <span class="status done">已完成</span>
+      </div>
+
+      <h3>产品目标</h3>
+      <ul>
+        <li>让读者在首页 5 秒内理解站点主题，并能快速进入感兴趣的文章。</li>
+        <li>让管理员能在后台完成从写草稿到发布、从评论审核到站点设置的闭环。</li>
+        <li>首版优先保证内容发布、内容浏览、评论管理、基础统计可用。</li>
+      </ul>
+
+      <h3>核心业务流程</h3>
+      <table>
+        <thead><tr><th>流程</th><th>步骤</th><th>成功标准</th></tr></thead>
+        <tbody>
+          <tr><td>内容发布</td><td>登录后台 → 新建文章 → 填标题/摘要/分类/标签/正文 → 保存草稿 → 发布</td><td>前台首页和列表能看到已发布文章。</td></tr>
+          <tr><td>内容检索</td><td>进入前台 → 输入关键词或点击分类标签 → 查看列表 → 打开详情</td><td>筛选结果准确，空结果有清晰提示。</td></tr>
+          <tr><td>评论治理</td><td>读者提交评论 → 后台查看待审 → 审核通过或隐藏删除</td><td>未审核评论不直接公开，后台可追踪状态。</td></tr>
+          <tr><td>站点维护</td><td>后台设置标题、简介、作者资料、SEO 关键字</td><td>前台展示同步更新。</td></tr>
+        </tbody>
+      </table>
+
+      <h3>页面清单</h3>
+      <table>
+        <thead><tr><th>页面</th><th>文件</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>前台首页</td><td><code>ui_home.html</code></td><td>博客首页，承载精选内容、文章列表和侧边栏。</td></tr>
+          <tr><td>文章详情</td><td><code>ui_post_detail.html</code></td><td>正文阅读页，包含目录、评论、相关文章。</td></tr>
+          <tr><td>后台登录</td><td><code>ui_admin_login.html</code></td><td>管理员登录入口。</td></tr>
+          <tr><td>后台仪表盘</td><td><code>ui_admin_dashboard.html</code></td><td>运营概览、统计数据、近期动态。</td></tr>
+          <tr><td>文章管理</td><td><code>ui_admin_posts.html</code></td><td>文章列表、搜索筛选、批量操作。</td></tr>
+          <tr><td>文章编辑</td><td><code>ui_admin_editor.html</code></td><td>文章创建和编辑表单。</td></tr>
+          <tr><td>评论管理</td><td><code>ui_admin_comments.html</code></td><td>评论审核、隐藏、删除。</td></tr>
+          <tr><td>站点设置</td><td><code>ui_admin_settings.html</code></td><td>基础信息、作者资料、SEO 设置。</td></tr>
+        </tbody>
+      </table>
+
+      <h3>非功能需求</h3>
+      <ul>
+        <li>前台阅读页在移动端不乱版，正文宽度控制在舒适阅读范围。</li>
+        <li>后台操作按钮有明确状态，危险操作需二次确认。</li>
+        <li>接口返回格式统一为 <code>{ code, msg, data }</code>。</li>
+        <li>数据库必须使用 MySQL，库名规划为 <code>blog_db</code>。</li>
+        <li>后端服务端口固定为 <code>8080</code>。</li>
+      </ul>
+    </section>
+
+    <section class="section" id="phase2">
+      <div class="section-head">
+        <div>
+          <h2>PHASE 2 UI 设计</h2>
+          <div class="sub">以下是 HTML 原型入口。请先预览确认，再进入正式开发。</div>
+        </div>
+        <span class="status pause">等待用户确认</span>
+      </div>
+
+      <div class="alert">
+        UI 原型已完成。按照序章要求，当前必须暂停：请预览所有页面后确认是否继续进入 PHASE 3 前端开发。
+      </div>
+
+      <div class="preview-grid">
+        <a class="preview" href="ui_home.html"><b>前台首页</b><span>精选文章、最新文章、分类、标签、作者卡片。</span></a>
+        <a class="preview" href="ui_post_detail.html"><b>文章详情</b><span>正文、目录、评论、相关文章、上一篇下一篇。</span></a>
+        <a class="preview" href="ui_admin_login.html"><b>后台登录</b><span>管理员登录入口和安全提示。</span></a>
+        <a class="preview" href="ui_admin_dashboard.html"><b>后台仪表盘</b><span>文章、阅读、评论、近期动态总览。</span></a>
+        <a class="preview" href="ui_admin_posts.html"><b>文章管理</b><span>文章列表、搜索、筛选、状态管理。</span></a>
+        <a class="preview" href="ui_admin_editor.html"><b>文章编辑</b><span>标题、摘要、分类、标签、正文、发布设置。</span></a>
+        <a class="preview" href="ui_admin_comments.html"><b>评论管理</b><span>评论审核、回复、隐藏和删除。</span></a>
+        <a class="preview" href="ui_admin_settings.html"><b>站点设置</b><span>站点信息、作者资料、SEO 配置。</span></a>
+      </div>
+    </section>
+
+    <section class="section" id="database">
+      <div class="section-head">
+        <div>
+          <h2>数据库设计草案</h2>
+          <div class="sub">PHASE 5 会生成正式 <code>database/init.sql</code>，当前仅作为产品设计约束。</div>
+        </div>
+        <span class="status wait">待 PHASE 5</span>
+      </div>
+      <table>
+        <thead><tr><th>表名</th><th>用途</th><th>关键字段</th></tr></thead>
+        <tbody>
+          <tr><td><code>admin_user</code></td><td>后台用户</td><td>username, password_hash, role, status, last_login_time</td></tr>
+          <tr><td><code>post</code></td><td>文章主体</td><td>title, slug, summary, content, cover_url, status, publish_time</td></tr>
+          <tr><td><code>category</code></td><td>文章分类</td><td>name, slug, sort_order, description</td></tr>
+          <tr><td><code>tag</code></td><td>文章标签</td><td>name, slug, color</td></tr>
+          <tr><td><code>post_tag</code></td><td>文章标签关联</td><td>post_id, tag_id</td></tr>
+          <tr><td><code>comment</code></td><td>评论</td><td>post_id, nickname, email, content, status, reply_content</td></tr>
+          <tr><td><code>site_setting</code></td><td>站点设置</td><td>setting_key, setting_value, group_name</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section" id="api">
+      <div class="section-head">
+        <div>
+          <h2>API 草案</h2>
+          <div class="sub">PHASE 4 会实现接口，当前列出接口边界。</div>
+        </div>
+        <span class="status wait">待 PHASE 4</span>
+      </div>
+      <table>
+        <thead><tr><th>方法</th><th>路径</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>POST</td><td><code>/api/auth/login</code></td><td>后台登录。</td></tr>
+          <tr><td>GET</td><td><code>/api/posts</code></td><td>前台文章列表，支持 keyword/category/tag/page。</td></tr>
+          <tr><td>GET</td><td><code>/api/posts/{slug}</code></td><td>文章详情。</td></tr>
+          <tr><td>POST</td><td><code>/api/comments</code></td><td>提交评论。</td></tr>
+          <tr><td>GET</td><td><code>/api/admin/posts</code></td><td>后台文章列表。</td></tr>
+          <tr><td>POST</td><td><code>/api/admin/posts</code></td><td>新建文章。</td></tr>
+          <tr><td>PUT</td><td><code>/api/admin/posts/{id}</code></td><td>编辑文章。</td></tr>
+          <tr><td>DELETE</td><td><code>/api/admin/posts/{id}</code></td><td>逻辑删除文章。</td></tr>
+          <tr><td>PUT</td><td><code>/api/admin/comments/{id}/status</code></td><td>审核或隐藏评论。</td></tr>
+          <tr><td>PUT</td><td><code>/api/admin/settings</code></td><td>更新站点设置。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section" id="summary">
+      <div class="section-head">
+        <div>
+          <h2>当前总结</h2>
+          <div class="sub">阶段 0-2 的交付状态。</div>
+        </div>
+      </div>
+      <ul>
+        <li>已完成需求分析、产品设计和 UI 原型。</li>
+        <li>已遵守序章要求：没有生成多余 Markdown 文档。</li>
+        <li>当前暂停在 PHASE 2，等待确认 UI 后才能进入 PHASE 3。</li>
+        <li>下一步确认后将开始前端开发，并同步更新本总控台进度。</li>
+      </ul>
+    </section>
+  </main>
+
+  <script>
+    const navItems = document.querySelectorAll('.nav-item');
+    const sections = document.querySelectorAll('section[id]');
+    navItems.forEach(item => {
+      item.addEventListener('click', event => {
+        event.preventDefault();
+        const target = document.querySelector(item.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const id = '#' + entry.target.id;
+        navItems.forEach(item => item.classList.toggle('active', item.getAttribute('href') === id));
+      });
+    }, { threshold: .25, rootMargin: '-20px 0px -65% 0px' });
+    sections.forEach(section => observer.observe(section));
+  </script>
+</body>
+</html>

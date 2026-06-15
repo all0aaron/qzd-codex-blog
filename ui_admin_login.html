@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>后台登录 - 墨丘博客系统</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { min-height: 100vh; display: grid; grid-template-columns: 1.05fr .95fr; background: #f6f8fb; color: #172033; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
+    .visual { position: relative; display: grid; align-items: end; padding: 44px; color: #fff; background: linear-gradient(180deg, rgba(15,23,42,.15), rgba(15,23,42,.86)), url("https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=82") center/cover; }
+    .visual h1 { font-size: 38px; line-height: 1.18; letter-spacing: 0; margin-bottom: 14px; }
+    .visual p { max-width: 560px; color: #dce6f3; line-height: 1.8; }
+    .panel { display: grid; align-items: center; padding: 34px; }
+    .card { max-width: 420px; width: 100%; margin: 0 auto; background: #fff; border: 1px solid #e3eaf2; border-radius: 8px; padding: 30px; box-shadow: 0 16px 34px rgba(15,23,42,.08); }
+    .back { display: inline-block; color: #0f766e; font-weight: 800; font-size: 13px; margin-bottom: 22px; text-decoration: none; }
+    h2 { font-size: 25px; margin-bottom: 8px; }
+    .sub { color: #667085; font-size: 13.5px; line-height: 1.7; margin-bottom: 22px; }
+    label { display: block; font-weight: 700; color: #344054; font-size: 13px; margin: 14px 0 7px; }
+    input { width: 100%; border: 1px solid #d8e1ec; border-radius: 8px; padding: 12px; font: inherit; outline: 0; }
+    input:focus { border-color: #0f766e; box-shadow: 0 0 0 3px rgba(15,118,110,.12); }
+    .row { display: flex; justify-content: space-between; align-items: center; margin: 14px 0 20px; color: #667085; font-size: 13px; }
+    button { width: 100%; border: 0; background: #0f766e; color: #fff; border-radius: 8px; padding: 13px; font-weight: 800; cursor: pointer; }
+    .tips { margin-top: 16px; background: #f0fdfa; color: #115e59; border-radius: 8px; padding: 12px; font-size: 13px; line-height: 1.7; }
+    .pager { margin-top: 20px; display: flex; justify-content: space-between; gap: 10px; }
+    .pager a { color: #334155; font-size: 13px; text-decoration: none; }
+    @media (max-width: 860px) { body { grid-template-columns: 1fr; } .visual { min-height: 310px; } }
+  </style>
+</head>
+<body>
+  <section class="visual">
+    <div><h1>内容后台</h1><p>集中管理文章、分类、标签、评论和站点设置，让创作者把精力放在持续写作上。</p></div>
+  </section>
+  <section class="panel">
+    <div class="card">
+      <a class="back" href="index.html">返回总控台</a>
+      <h2>管理员登录</h2>
+      <p class="sub">请输入后台账号和密码。登录后可进入文章管理、评论审核和系统设置。</p>
+      <label>账号</label><input value="admin" placeholder="请输入账号">
+      <label>密码</label><input type="password" value="admin123" placeholder="请输入密码">
+      <div class="row"><span><input type="checkbox" checked style="width:auto;"> 记住登录状态</span><a>忘记密码</a></div>
+      <button>登录后台</button>
+      <div class="tips">原型默认账号：admin / admin123。正式开发阶段会使用加密密码和登录态校验。</div>
+      <div class="pager"><a href="ui_post_detail.html">上一页：文章详情</a><a href="ui_admin_dashboard.html">下一页：后台仪表盘</a></div>
+    </div>
+  </section>
+</body>
+</html>
