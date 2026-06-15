@@ -1,0 +1,139 @@
+{
+  "project": "魁战道博客系统",
+  "branchName": "ralph/blog-completion",
+  "description": "博客系统全自动开发——完善前后端功能、修复集成问题、完成测试与总结",
+  "techStack": "Node.js (HTTP原生) + 原生HTML/CSS/JS，端口8942，数据存储用store.json（JSON文件），无需MySQL",
+  "projectRoot": "D:/桌面/zidong/其他项目/qzd-codex/blog",
+  "serverStart": "cd backend && node server.js",
+  "serverUrl": "http://localhost:8942",
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "检查并完善前台首页（frontend/index.html + app.js）",
+      "description": "作为访客，我希望能正常访问博客首页，看到文章列表、分类标签，文章标题可点击进入详情。",
+      "acceptanceCriteria": [
+        "访问 http://localhost:8942 能正常显示博客首页",
+        "文章列表能从后端API加载并展示（标题、摘要、时间、分类）",
+        "点击文章标题跳转到文章详情页",
+        "分类/标签筛选功能可用",
+        "页面样式与UI原型（ui_home.html）一致",
+        "frontend/assets/app.js 中API请求地址正确（相对路径或 http://localhost:8942）"
+      ],
+      "priority": 1,
+      "passes": false,
+      "notes": "参考 ui_home.html 作为设计原型；server.js 中 /api/posts 接口已存在"
+    },
+    {
+      "id": "US-002",
+      "title": "完善文章详情页（ui_post_detail.html → frontend实现）",
+      "description": "作为访客，我希望点击文章后能看到完整的文章内容页面，包含标题、正文、发布时间、作者、评论区。",
+      "acceptanceCriteria": [
+        "文章详情页能根据URL参数加载对应文章内容（如 /post?id=xxx 或 /post/slug）",
+        "显示文章标题、正文内容、发布时间",
+        "页面底部有评论区（展示评论列表，支持游客提交评论）",
+        "评论提交后即时刷新显示",
+        "样式与 ui_post_detail.html 原型一致"
+      ],
+      "priority": 2,
+      "passes": false,
+      "notes": "server.js 中应有 /api/posts/:id 和 /api/comments 接口"
+    },
+    {
+      "id": "US-003",
+      "title": "完善后台管理登录页（frontend/admin.html 登录功能）",
+      "description": "作为管理员，我希望能通过登录页面进入后台，用户名密码验证通过后跳转到管理控制台。",
+      "acceptanceCriteria": [
+        "访问 http://localhost:8942/admin.html 显示登录表单",
+        "输入正确的用户名/密码（admin/admin123 或 store.json 中存储的）能成功登录",
+        "登录成功后跳转到后台管理界面",
+        "登录失败给出错误提示",
+        "登录态用 localStorage 存储 token",
+        "未登录直接访问后台管理页面会跳转到登录页"
+      ],
+      "priority": 3,
+      "passes": false,
+      "notes": "server.js 中 /api/admin/login 接口应已实现；admin.js 处理登录逻辑"
+    },
+    {
+      "id": "US-004",
+      "title": "完善后台文章管理（列表+新增+编辑+删除）",
+      "description": "作为管理员，我希望能在后台管理所有博客文章，支持查看文章列表、新建文章、编辑已有文章、删除文章。",
+      "acceptanceCriteria": [
+        "后台管理界面有文章列表，显示标题、状态（草稿/已发布）、发布时间",
+        "点击新建文章打开编辑器，支持填写标题、正文内容（支持Markdown或富文本）、分类标签",
+        "点击编辑能加载已有内容并修改保存",
+        "点击删除有确认提示，确认后删除成功",
+        "文章状态可在草稿和已发布之间切换",
+        "操作后数据即时同步（刷新后仍存在）"
+      ],
+      "priority": 4,
+      "passes": false,
+      "notes": "参考 ui_admin_posts.html 和 ui_admin_editor.html 原型；admin.js 处理逻辑"
+    },
+    {
+      "id": "US-005",
+      "title": "完善后台评论管理（列表+审核+删除）",
+      "description": "作为管理员，我希望在后台能看到所有用户评论，可以审核通过或删除不当评论。",
+      "acceptanceCriteria": [
+        "评论管理页显示所有评论（评论者、内容、所属文章、时间、状态）",
+        "可以标记评论为通过或拒绝",
+        "可以删除评论",
+        "操作后列表即时刷新",
+        "样式与 ui_admin_comments.html 原型一致"
+      ],
+      "priority": 5,
+      "passes": false,
+      "notes": "server.js 中需要有 /api/admin/comments 相关接口"
+    },
+    {
+      "id": "US-006",
+      "title": "后台系统设置页（站点名称、基本配置）",
+      "description": "作为管理员，我希望能在设置页修改博客站点名称、副标题、每页显示文章数等基本配置。",
+      "acceptanceCriteria": [
+        "设置页可以修改站点名称、副标题",
+        "修改后前台首页的站点名称同步更新",
+        "设置保存成功给出提示",
+        "刷新后设置仍保留（持久化到 store.json）",
+        "样式与 ui_admin_settings.html 原型一致"
+      ],
+      "priority": 6,
+      "passes": false,
+      "notes": "server.js 中 /api/admin/settings 接口应已实现"
+    },
+    {
+      "id": "US-007",
+      "title": "完整功能测试与问题修复",
+      "description": "作为开发者，我需要对整个博客系统进行完整的端到端测试，修复所有发现的问题。",
+      "acceptanceCriteria": [
+        "启动 node backend/server.js 无报错",
+        "前台：首页加载正常，文章列表显示正确",
+        "前台：文章详情页正常，评论提交成功",
+        "后台：登录流程正常",
+        "后台：文章 CRUD 全部正常",
+        "后台：评论管理正常",
+        "后台：设置保存正常",
+        "所有 API 请求无 404/500 错误",
+        "在 index.html 总控台更新各阶段状态为完成"
+      ],
+      "priority": 7,
+      "passes": false,
+      "notes": "修复所有bug；更新 index.html 中各 PHASE 的状态标记"
+    },
+    {
+      "id": "US-008",
+      "title": "创建项目启动说明文件（写入index.html）",
+      "description": "作为用户，我希望能在 index.html 总控台看到完整的启动说明，知道如何运行这个博客系统。",
+      "acceptanceCriteria": [
+        "index.html 中有清晰的启动步骤：cd backend && node server.js",
+        "说明访问地址：http://localhost:8942",
+        "说明管理后台地址：http://localhost:8942/admin.html",
+        "说明默认管理员账号密码",
+        "index.html 中所有 PHASE 状态更新为完成",
+        "项目整体完成度标注为100%"
+      ],
+      "priority": 8,
+      "passes": false,
+      "notes": "按照序章.html的规范，所有信息写入 index.html"
+    }
+  ]
+}
