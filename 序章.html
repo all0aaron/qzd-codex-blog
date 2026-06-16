@@ -178,6 +178,7 @@
   </div>
 
   <div class="nav-group-title">总览</div>
+  <a class="nav-item" href="#s-env"><span class="ni">⚙️</span>运行环境配置</a>
   <a class="nav-item" href="#s-intro"><span class="ni">🚀</span>概述与工作方式</a>
   <a class="nav-item" href="#s-output"><span class="ni">📁</span>输出规范</a>
   <a class="nav-item" href="#s-index"><span class="ni">🖥️</span>index.html 总控台</a>
@@ -221,6 +222,52 @@
 
   <div class="alert alert-red">
     ⚠️ <strong>强制阅读：</strong>本文件是你开始任何项目前必须完整读完的唯一参考文档。不允许频繁打断用户询问细节，遇到任何技术选型、架构决策，自己根据项目特点判断，只在 UI 设计完成后暂停等待用户确认。
+  </div>
+
+  <!-- ===== 运行环境配置 ===== -->
+  <div class="section" id="s-env">
+    <div class="section-hd">
+      <div class="s-icon bg-orange">⚙️</div>
+      <div><div class="s-title">运行环境配置（AI 必读）</div><div class="s-sub">当前机器的配置状态，你不需要做任何配置，直接使用即可</div></div>
+    </div>
+
+    <div class="alert alert-green">
+      ✅ <strong>以下配置已全部完成，你（AI）直接使用即可，不要尝试重新配置或修改这些设置。</strong>
+    </div>
+
+    <h3>GitHub 配置（已就绪）</h3>
+    <table>
+      <thead><tr><th>配置项</th><th>状态</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>GitHub CLI（gh）</td><td>✅ 已安装 v2.94.0</td><td>无需重新安装</td></tr>
+        <tr><td>GitHub 账号授权</td><td>✅ 已登录，token 存储在系统 keyring</td><td>无需重新 auth login</td></tr>
+        <tr><td>git credential</td><td>✅ 已配置 HTTPS + gh 凭据助手</td><td>push 时自动认证</td></tr>
+        <tr><td>仓库创建权限</td><td>✅ 有 repo、workflow、gist 权限</td><td>可自动创建私有仓库</td></tr>
+      </tbody>
+    </table>
+
+    <h3>你（AI）的 git 操作规范</h3>
+    <div class="alert alert-blue">
+      📌 <strong>你只需要负责 commit，push 由 启动Ralph.bat 自动完成。</strong>
+    </div>
+    <ul>
+      <li>每完成 prd.json 中一个任务后：<code>git add .</code> → <code>git commit -m "feat: [US-XXX] 任务标题"</code></li>
+      <li><strong>不要执行 git push</strong>——BAT 文件在所有任务完成后统一 push</li>
+      <li><strong>不要执行 gh repo create</strong>——BAT 文件启动时已自动处理</li>
+      <li><strong>不要修改 git remote</strong>——remote 已由 BAT 自动配置</li>
+      <li>如果 git commit 失败（如没有变更），忽略错误，继续下一个任务</li>
+    </ul>
+
+    <h3>Codex CLI 配置（已就绪）</h3>
+    <table>
+      <thead><tr><th>配置项</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>API Key</td><td>已在 启动Ralph.bat 中通过环境变量 <code>OPENAI_API_KEY</code> 设置，无需你处理</td></tr>
+        <tr><td>API Base URL</td><td>已在 启动Ralph.bat 中通过 <code>OPENAI_BASE_URL</code> 设置</td></tr>
+        <tr><td>调用方式</td><td>ralph.ps1 通过 <code>codex exec --dangerously-bypass-approvals-and-sandbox</code> 调用你</td></tr>
+        <tr><td>工作目录</td><td>每次调用时已通过 <code>-C 项目路径</code> 指定，你在正确的目录下工作</td></tr>
+      </tbody>
+    </table>
   </div>
 
   <!-- ===== 概述 ===== -->
