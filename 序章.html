@@ -532,7 +532,7 @@ ui_miniapp_xxx.html    # 小程序专属页面</pre>
       <li>接口遵循 RESTful 风格（GET 查询、POST 新增、PUT 修改、DELETE 删除）</li>
       <li>需要登录的接口统一鉴权（JWT 或 Session，由你决定）</li>
       <li>有跨域配置，允许前端项目访问</li>
-      <li><strong>后端端口固定 8080，不要随意修改</strong></li>
+      <li><strong>后端端口从 2731 开始分配（第1个项目2731，第2个2732，以此类推），不要使用 8080</strong></li>
       <li>有 API 文档（接口列表、请求参数、响应格式），写入 index.html</li>
     </ul>
   </div>
@@ -651,15 +651,20 @@ CREATE DATABASE IF NOT EXISTS `blog_db`
 USE `blog_db`;</pre>
 
     <h3>端口规范</h3>
+    <div class="alert alert-yellow">
+      ⚠️ <strong>多项目并发时端口不能冲突！</strong>每个项目分配独立端口段，根据项目编号递增。
+    </div>
     <table>
-      <thead><tr><th>服务</th><th>端口</th><th>说明</th></tr></thead>
+      <thead><tr><th>服务</th><th>端口范围</th><th>分配规则</th></tr></thead>
       <tbody>
-        <tr><td>后端 API</td><td><strong>8080</strong></td><td>固定，不随意修改</td></tr>
-        <tr><td>前端开发服务器</td><td>3000</td><td>开发模式</td></tr>
-        <tr><td>前端生产</td><td>80</td><td>Nginx 部署</td></tr>
-        <tr><td>MySQL</td><td>3306</td><td>固定</td></tr>
+        <tr><td>前端开发服务器</td><td><strong>1421 起</strong></td><td>第1个项目1421，第2个1422，依此类推</td></tr>
+        <tr><td>后端 API</td><td><strong>2731 起</strong></td><td>第1个项目2731，第2个2732，依此类推</td></tr>
+        <tr><td>MySQL</td><td>3306</td><td>固定，所有项目共用，各自建独立数据库名</td></tr>
       </tbody>
     </table>
+    <div class="alert alert-blue">
+      💡 <strong>如何确定本项目用哪个端口：</strong>查看 <code>prd.json</code> 中的 <code>port</code> 字段（Bootstrap 生成时自动分配），或查看 <code>index.html</code> 总控台的端口记录。若两者都没有，读取当前项目目录名的序号判断，或直接从 2731/1421 开始，先检查端口是否被占用（<code>netstat -ano | findstr 2731</code>）。
+    </div>
   </div>
 
   <!-- ===== 需求更新规则 ===== -->
@@ -713,7 +718,7 @@ USE `blog_db`;</pre>
       <li class="rule-no"><span class="rule-icon">❌</span>用 TODO 代替实际代码实现</li>
       <li class="rule-no"><span class="rule-icon">❌</span>UI 原型使用占位符数据（必须填充真实感的示例内容）</li>
       <li class="rule-no"><span class="rule-icon">❌</span>修改其他已有项目的文件或数据库</li>
-      <li class="rule-no"><span class="rule-icon">❌</span>修改后端端口（固定 8080）</li>
+      <li class="rule-no"><span class="rule-icon">❌</span>使用 8080 或 3000 等常见端口（多项目并发时会冲突，必须用 2731+ 和 1421+）</li>
       <li class="rule-no"><span class="rule-icon">❌</span>使用 MySQL 以外的数据库</li>
       <li class="rule-no"><span class="rule-icon">❌</span>省略错误处理和边界情况</li>
     </ul>
@@ -722,7 +727,7 @@ USE `blog_db`;</pre>
 
     <h3>🔁 多项目并发说明</h3>
     <div class="alert alert-blue">
-      用户可能同时推进多个项目，每个项目只看自己文件夹里的内容。不同项目之间完全隔离，不要混淆。每个项目在 MySQL localhost:3306 下单独建一个库，命名不同，互不干扰。
+      用户同时推进多个项目，每个项目只看自己文件夹里的内容，完全隔离，不要混淆。每个项目在 MySQL localhost:3306 下单独建一个库，命名不同，互不干扰。<strong>前端端口从 1421 起分配，后端端口从 2731 起分配，确保多项目不冲突。</strong>
     </div>
   </div>
 
