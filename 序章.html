@@ -202,6 +202,11 @@
   <a class="nav-item" href="#s-ralph"><span class="ni">🔁</span>Ralph 是什么</a>
   <a class="nav-item" href="#s-ralph-flow"><span class="ni">⚙️</span>执行流程</a>
   <a class="nav-item" href="#s-ralph-prompt"><span class="ni">💬</span>如何对 Codex 说</a>
+
+  <div class="nav-group-title">🚀 批量项目管理</div>
+  <a class="nav-item" href="#s-batch"><span class="ni">📦</span>30项目通用方案</a>
+  <a class="nav-item" href="#s-batch-github"><span class="ni">🐙</span>GitHub 自动化</a>
+  <a class="nav-item" href="#s-batch-prompt"><span class="ni">💬</span>标准话术模板</a>
 </nav>
 
 <!-- ===== 主内容 ===== -->
@@ -819,6 +824,170 @@ git log --oneline -10</pre>
       ⚠️ <strong>任务拆分原则：每个任务要足够小，Codex 能在一次会话内完成。</strong><br>
       ✅ 好的任务：「添加评论列表API」「完善首页文章展示」「实现登录验证」<br>
       ❌ 太大：「实现完整登录系统」「重构整个后端」「开发全部功能」
+    </div>
+  </div>
+
+  <!-- ===== 30项目批量方案 ===== -->
+  <div class="section" id="s-batch">
+    <div class="section-hd">
+      <div class="s-icon bg-indigo">📦</div>
+      <div><div class="s-title">30个项目同步开发——通用模板方案</div><div class="s-sub">每个项目只需放入同一套文件，用一句话描述驱动 AI 自动展开</div></div>
+    </div>
+
+    <div class="alert alert-green">
+      ✅ <strong>核心思路：</strong>Ralph 支持「Bootstrap 自动生成」—— 如果项目目录里没有 prd.json，只需有一个 <code>项目说明.txt</code>（一句话描述），Ralph 会先让 Codex 读取 <code>序章.html</code> 的规范，自动生成完整的 prd.json 任务清单，然后继续自动开发。
+    </div>
+
+    <h3>每个项目需要放的文件（全部一样，只有一个文件不同）</h3>
+    <table>
+      <thead><tr><th>文件</th><th>是否相同</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td><code>序章.html</code></td><td>✅ 所有项目完全一样</td><td>AI 开发规范，不需要修改</td></tr>
+        <tr><td><code>ralph.ps1</code></td><td>✅ 所有项目完全一样</td><td>自动循环脚本（带 Bootstrap）</td></tr>
+        <tr><td><code>CODEX.md</code></td><td>✅ 所有项目完全一样</td><td>给 Codex 的执行指令模板</td></tr>
+        <tr><td><code>启动Ralph.bat</code></td><td>✅ 所有项目完全一样</td><td>双击启动，含 GitHub 自动化</td></tr>
+        <tr><td><code>项目说明.txt</code></td><td>⭐ 每个项目不同</td><td>一句话描述要开发什么，这是唯一需要改的文件</td></tr>
+      </tbody>
+    </table>
+
+    <h3>项目说明.txt 格式（一句话）</h3>
+    <pre>开发一个电商平台，有前台商品列表、商品详情、购物车、结算，后台支持商品CRUD、订单管理、用户管理。
+
+开发一个任务管理工具，支持任务分类、优先级、截止日期，有团队协作和进度看板功能。
+
+开发一个外卖小程序，有商家入驻、菜品展示、购物车下单、骑手接单配送流程和后台统计报表。</pre>
+
+    <h3>Bootstrap 自动流程</h3>
+    <div class="phase-grid">
+      <div class="phase-card"><div class="pnum">STEP 1</div><div class="pname">双击 BAT</div><div class="pdesc">启动 Ralph，自动初始化 git 仓库</div></div>
+      <div class="phase-card"><div class="pnum">STEP 2</div><div class="pname">读取说明</div><div class="pdesc">ralph.ps1 读取 项目说明.txt 获取项目描述</div></div>
+      <div class="phase-card"><div class="pnum">STEP 3</div><div class="pname">生成任务</div><div class="pdesc">Codex 读序章.html + 项目描述，自动生成 prd.json</div></div>
+      <div class="phase-card"><div class="pnum">STEP 4</div><div class="pname">自动开发</div><div class="pdesc">Ralph 循环执行 prd.json 中的所有任务</div></div>
+      <div class="phase-card"><div class="pnum">STEP 5</div><div class="pname">自动提交</div><div class="pdesc">每完成一个任务自动 git commit</div></div>
+      <div class="phase-card"><div class="pnum">STEP 6</div><div class="pname">推送 GitHub</div><div class="pdesc">全部完成后自动 git push（需登录 gh CLI）</div></div>
+    </div>
+
+    <h3>模板文件在哪里获取</h3>
+    <div class="alert alert-blue">
+      📁 <code>ralph/项目模板/</code> 文件夹中已包含所有通用文件（ralph.ps1、CODEX.md、启动Ralph.bat、项目说明.txt示例）。<br>
+      每次新建项目：<strong>复制整个 项目模板/ 文件夹内容 → 粘贴到新项目目录 → 修改 项目说明.txt → 双击 启动Ralph.bat</strong>
+    </div>
+
+    <h3>30个项目的操作流程</h3>
+    <ol>
+      <li>从 <code>ralph/项目模板/</code> 复制4个通用文件到新项目文件夹</li>
+      <li>把 <code>序章.html</code> 也复制进去（总共5个文件）</li>
+      <li>编辑 <code>项目说明.txt</code>，写一句话描述这个项目</li>
+      <li>双击 <code>启动Ralph.bat</code>，剩下的全部交给 AI</li>
+      <li>30个项目可以同时启动，各自在自己的终端跑</li>
+    </ol>
+  </div>
+
+  <!-- ===== GitHub 自动化 ===== -->
+  <div class="section" id="s-batch-github">
+    <div class="section-hd">
+      <div class="s-icon bg-purple">🐙</div>
+      <div><div class="s-title">GitHub 自动化——自动建仓库、自动推送</div><div class="s-sub">启动Ralph.bat 已内置 GitHub 自动化逻辑</div></div>
+    </div>
+
+    <div class="alert alert-yellow">
+      ⚠️ <strong>前提条件：</strong>需要安装并登录 <code>gh</code>（GitHub CLI）。安装后执行 <code>gh auth login</code> 完成授权，之后一劳永逸。
+    </div>
+
+    <h3>GitHub CLI 安装</h3>
+    <pre>// 方法1：官网下载
+https://cli.github.com/
+
+// 方法2：winget 安装
+winget install --id GitHub.cli
+
+// 登录（只需执行一次）
+gh auth login</pre>
+
+    <h3>启动Ralph.bat 的 GitHub 自动化逻辑</h3>
+    <table>
+      <thead><tr><th>检测条件</th><th>自动执行的操作</th></tr></thead>
+      <tbody>
+        <tr><td>没有 .git 目录</td><td>自动执行 <code>git init</code> + 初始提交</td></tr>
+        <tr><td>没有 origin 远端</td><td>自动用文件夹名创建 GitHub 私有仓库，设置 remote 并推送</td></tr>
+        <tr><td>Ralph 循环完成后</td><td>自动 <code>git push origin HEAD</code> 推送所有提交</td></tr>
+      </tbody>
+    </table>
+
+    <h3>手动创建 GitHub 仓库（备用）</h3>
+    <pre>// 在项目目录执行：
+git init -b main
+git add .
+git commit -m "init: project setup"
+gh repo create 项目名称 --private --source=. --remote=origin --push</pre>
+
+    <div class="alert alert-green">
+      ✅ <strong>最终效果：</strong>双击 BAT → AI 自动开发 → 每个任务自动 commit → 全部完成后自动 push 到 GitHub。30个项目分别运行，每个都有独立的 GitHub 仓库，代码安全备份在云端。
+    </div>
+  </div>
+
+  <!-- ===== 标准话术模板 ===== -->
+  <div class="section" id="s-batch-prompt">
+    <div class="section-hd">
+      <div class="s-icon bg-green">💬</div>
+      <div><div class="s-title">标准话术模板——各类项目的 项目说明.txt 示例</div><div class="s-sub">复制对应模板，填入 项目说明.txt，双击 BAT 即可</div></div>
+    </div>
+
+    <div class="alert alert-purple">
+      📌 <strong>使用方式：</strong>把下面任意一段复制到 <code>项目说明.txt</code> 文件中（用记事本），替换具体描述，保存后双击 <code>启动Ralph.bat</code>。
+    </div>
+
+    <h3>电商 / 商城系统</h3>
+    <div class="db-card">
+      <div class="db-title">// 项目说明.txt 内容</div>
+      <div style="color:#e2e8f0;line-height:1.9;font-size:13px;">
+        开发一个电商平台，前台有商品列表（分类筛选、关键词搜索）、商品详情、购物车、结算下单；后台管理有商品CRUD（含图片上传）、订单管理（查看/发货/取消）、用户管理、数据统计看板。技术栈不限，自主选型，优先使用无需复杂配置的方案。
+      </div>
+    </div>
+
+    <h3>博客 / 内容管理系统</h3>
+    <div class="db-card">
+      <div class="db-title">// 项目说明.txt 内容</div>
+      <div style="color:#e2e8f0;line-height:1.9;font-size:13px;">
+        开发一个博客系统，前台有文章列表（分类、标签、搜索）、文章详情（支持Markdown渲染）、评论区（游客可留言）；后台管理有文章CRUD（Markdown编辑器）、评论审核、分类管理、站点设置。技术栈自主选型。
+      </div>
+    </div>
+
+    <h3>任务管理 / 项目协作工具</h3>
+    <div class="db-card">
+      <div class="db-title">// 项目说明.txt 内容</div>
+      <div style="color:#e2e8f0;line-height:1.9;font-size:13px;">
+        开发一个任务管理工具，支持创建任务（标题、描述、优先级、截止日期）、分类看板（待办/进行中/已完成）、拖拽排序、任务详情和进度追踪；有用户登录，数据持久化存储。技术栈自主选型。
+      </div>
+    </div>
+
+    <h3>外卖 / 餐饮点单系统</h3>
+    <div class="db-card">
+      <div class="db-title">// 项目说明.txt 内容</div>
+      <div style="color:#e2e8f0;line-height:1.9;font-size:13px;">
+        开发一个外卖点餐平台，前台有商家列表、菜品浏览、购物车下单、订单状态追踪；后台有菜品管理、订单处理（接单/配送/完成）、营业设置；支持用户注册登录。技术栈自主选型。
+      </div>
+    </div>
+
+    <h3>企业官网 / 展示站</h3>
+    <div class="db-card">
+      <div class="db-title">// 项目说明.txt 内容</div>
+      <div style="color:#e2e8f0;line-height:1.9;font-size:13px;">
+        开发一家科技公司的企业官网，包含首页（Banner/核心产品/客户案例）、关于我们、产品服务（3个产品介绍页）、新闻动态（可后台发布）、联系我们（含表单提交）；后台可管理新闻和留言。设计风格现代简洁，移动端自适应。
+      </div>
+    </div>
+
+    <h3>库存 / 仓储管理系统</h3>
+    <div class="db-card">
+      <div class="db-title">// 项目说明.txt 内容</div>
+      <div style="color:#e2e8f0;line-height:1.9;font-size:13px;">
+        开发一个仓储库存管理系统，支持商品入库/出库记录、库存实时查询、低库存预警、库存流水报表、供应商管理；有角色权限（管理员/仓管员）；数据可导出Excel。技术栈自主选型。
+      </div>
+    </div>
+
+    <h3>提问记忆：如何让 Codex 先生成 prd.json 再开发</h3>
+    <div class="alert alert-blue">
+      💡 <strong>Bootstrap 触发条件：</strong>项目目录中<strong>没有 prd.json</strong> 但<strong>有 项目说明.txt</strong> 时，双击 <code>启动Ralph.bat</code>，ralph.ps1 会自动触发 Bootstrap 流程，让 Codex 读序章.html + 项目描述，生成 prd.json，然后立即开始自动开发。全程无需人工干预。
     </div>
   </div>
 
