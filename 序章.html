@@ -687,30 +687,51 @@ USE `blog_db`;</pre>
     </div>
 
     <div class="alert alert-green">
-      ✅ <strong>Ralph 已集成到本项目。</strong>启动文件：<code>启动Ralph-博客开发.bat</code>（双击即可）。AI 会自动循环完成 <code>prd.json</code> 中的所有任务，中途断了重新双击继续，已完成的任务不会重复做。
+      ✅ <strong>Ralph 已集成到本项目。</strong>双击 <code>启动Ralph.bat</code> 即可启动。AI 自动循环完成所有任务，中途中断后重新双击继续，已完成的任务不会重复做。
     </div>
 
     <h3>Ralph 是什么</h3>
     <p>Ralph 是一个<strong>自主 AI 任务循环脚本</strong>，原理很简单：</p>
     <ul>
-      <li>你把所有要做的功能写进 <code>prd.json</code>（任务清单）</li>
-      <li>Ralph 每次让 Codex 完成一个任务，完成后自动 <code>git commit</code></li>
-      <li>在 <code>prd.json</code> 中把该任务标记为完成（<code>passes: true</code>）</li>
+      <li>读取 <code>prd.json</code> 任务清单（支持自动生成，见下方 Bootstrap 说明）</li>
+      <li>每次让 Codex 完成一个任务，完成后自动 <code>git commit</code></li>
+      <li>把该任务在 <code>prd.json</code> 中标记为完成（<code>passes: true</code>）</li>
       <li>自动继续下一个，直到所有任务完成</li>
-      <li>你不需要盯着，去做别的事，回来看结果就行</li>
+      <li>全程不需要人盯着，去做别的事，回来看结果</li>
     </ul>
+
+    <div class="alert alert-purple">
+      🚀 <strong>Bootstrap 自动生成 prd.json：</strong>如果项目目录中<strong>没有 prd.json</strong> 但有 <code>项目说明.txt</code>（一句话描述项目），ralph.ps1 会先让 Codex 读取本文件（序章.html）+ 项目描述，自动生成完整的 prd.json 任务清单，然后立即开始循环开发。<strong>30个项目都用同一套文件，只需改 项目说明.txt。</strong>
+    </div>
 
     <h3>关键文件说明</h3>
     <table>
-      <thead><tr><th>文件</th><th>作用</th></tr></thead>
+      <thead><tr><th>文件</th><th>作用</th><th>是否必须手动创建</th></tr></thead>
       <tbody>
-        <tr><td><code>prd.json</code></td><td>任务清单，每个任务有 passes 字段记录完成状态</td></tr>
-        <tr><td><code>ralph.ps1</code></td><td>主循环脚本（PowerShell），驱动 codex exec 反复运行</td></tr>
-        <tr><td><code>CODEX.md</code></td><td>给 Codex 的指令模板，告诉它每次该做什么</td></tr>
-        <tr><td><code>progress.txt</code></td><td>AI 自动追加的进度日志，每次迭代后记录学到的内容</td></tr>
-        <tr><td><code>启动Ralph-博客开发.bat</code></td><td>双击启动入口，自动设置 API Key 和项目路径</td></tr>
+        <tr><td><code>项目说明.txt</code></td><td>一句话描述项目，Bootstrap 时读取</td><td>✅ 必须（只改这一个）</td></tr>
+        <tr><td><code>prd.json</code></td><td>任务清单，每个任务有 passes 字段记录状态</td><td>⚡ Bootstrap 自动生成</td></tr>
+        <tr><td><code>ralph.ps1</code></td><td>主循环脚本（PowerShell），含 Bootstrap 逻辑</td><td>✅ 复制模板即可</td></tr>
+        <tr><td><code>CODEX.md</code></td><td>给 Codex 的指令模板，告诉它每次该做什么</td><td>✅ 复制模板即可</td></tr>
+        <tr><td><code>启动Ralph.bat</code></td><td>双击启动，含 git init 和 GitHub 自动建仓逻辑</td><td>✅ 复制模板即可</td></tr>
+        <tr><td><code>progress.txt</code></td><td>AI 自动追加的进度日志</td><td>⚡ 自动创建</td></tr>
       </tbody>
     </table>
+
+    <h3>GitHub 自动化（已内置）</h3>
+    <p>启动Ralph.bat 会自动完成以下操作（需已安装并登录 gh CLI）：</p>
+    <ul>
+      <li>检测到无 <code>.git</code> → 自动 <code>git init</code> + 初始提交</li>
+      <li>检测到无 origin 远端 → 自动用文件夹名创建 GitHub 私有仓库并关联</li>
+      <li>Ralph 全部任务完成后 → 自动 <code>git push origin HEAD</code></li>
+    </ul>
+    <pre>// gh CLI 安装（一次性）
+winget install --id GitHub.cli --source winget
+
+// 登录（一次性，浏览器授权）
+gh auth login
+
+// 验证登录状态
+gh auth status</pre>
 
     <h3>中断后如何继续</h3>
     <div class="alert alert-yellow">
@@ -887,42 +908,53 @@ git log --oneline -10</pre>
   <div class="section" id="s-batch-github">
     <div class="section-hd">
       <div class="s-icon bg-purple">🐙</div>
-      <div><div class="s-title">GitHub 自动化——自动建仓库、自动推送</div><div class="s-sub">启动Ralph.bat 已内置 GitHub 自动化逻辑</div></div>
+      <div><div class="s-title">GitHub 自动化——自动建仓库、自动推送</div><div class="s-sub">启动Ralph.bat 已内置完整的 GitHub 自动化逻辑，无需手动操作</div></div>
     </div>
 
-    <div class="alert alert-yellow">
-      ⚠️ <strong>前提条件：</strong>需要安装并登录 <code>gh</code>（GitHub CLI）。安装后执行 <code>gh auth login</code> 完成授权，之后一劳永逸。
+    <div class="alert alert-green">
+      ✅ <strong>本机 GitHub CLI 已安装并登录</strong>（gh v2.94.0，账号已授权）。<br>
+      双击 <code>启动Ralph.bat</code> 后，GitHub 相关操作全部自动完成，不需要任何手动干预。
     </div>
 
-    <h3>GitHub CLI 安装</h3>
-    <pre>// 方法1：官网下载
-https://cli.github.com/
-
-// 方法2：winget 安装
-winget install --id GitHub.cli
-
-// 登录（只需执行一次）
-gh auth login</pre>
-
-    <h3>启动Ralph.bat 的 GitHub 自动化逻辑</h3>
+    <h3>启动Ralph.bat 的 GitHub 完整自动化流程</h3>
     <table>
-      <thead><tr><th>检测条件</th><th>自动执行的操作</th></tr></thead>
+      <thead><tr><th>检测条件</th><th>自动执行的操作</th><th>结果</th></tr></thead>
       <tbody>
-        <tr><td>没有 .git 目录</td><td>自动执行 <code>git init</code> + 初始提交</td></tr>
-        <tr><td>没有 origin 远端</td><td>自动用文件夹名创建 GitHub 私有仓库，设置 remote 并推送</td></tr>
-        <tr><td>Ralph 循环完成后</td><td>自动 <code>git push origin HEAD</code> 推送所有提交</td></tr>
+        <tr><td>项目目录无 <code>.git</code></td><td><code>git init -b main</code> + <code>git add .</code> + <code>git commit -m "init"</code></td><td>本地仓库初始化</td></tr>
+        <tr><td>没有 origin 远端</td><td><code>gh repo create 文件夹名 --private --source=. --remote=origin --push</code></td><td>GitHub 私有仓库自动创建并关联</td></tr>
+        <tr><td>Ralph 所有任务完成后</td><td><code>git push origin HEAD</code></td><td>全部提交自动推送到 GitHub</td></tr>
       </tbody>
     </table>
 
-    <h3>手动创建 GitHub 仓库（备用）</h3>
-    <pre>// 在项目目录执行：
-git init -b main
-git add .
-git commit -m "init: project setup"
-gh repo create 项目名称 --private --source=. --remote=origin --push</pre>
+    <h3>Ralph 循环期间的 git commit 规则</h3>
+    <p>每完成 prd.json 中一个任务，Codex 自动执行：</p>
+    <pre>git add .
+git commit -m "feat: [US-001] - 任务标题"</pre>
+    <p>所有任务完成后，BAT 自动执行一次 push，把所有 commit 同步到 GitHub。</p>
 
-    <div class="alert alert-green">
-      ✅ <strong>最终效果：</strong>双击 BAT → AI 自动开发 → 每个任务自动 commit → 全部完成后自动 push 到 GitHub。30个项目分别运行，每个都有独立的 GitHub 仓库，代码安全备份在云端。
+    <h3>如果 GitHub 推送失败（排查）</h3>
+    <pre>// 验证登录状态
+gh auth status
+
+// 手动重新登录（如果 token 过期）
+gh auth login
+
+// 手动推送
+git push origin HEAD
+
+// 手动创建仓库（如果自动创建失败）
+gh repo create 仓库名 --private --source=. --remote=origin --push</pre>
+
+    <h3>30个项目的 GitHub 仓库管理</h3>
+    <ul>
+      <li>每个项目文件夹名就是 GitHub 仓库名（全部私有）</li>
+      <li>30个项目各自独立的仓库，互不干扰</li>
+      <li>每个功能完成都有对应的 commit 记录，可追溯</li>
+      <li>在 <a href="https://github.com" target="_blank">github.com</a> 可以看到所有项目的仓库列表</li>
+    </ul>
+
+    <div class="alert alert-blue">
+      💡 <strong>最终效果：</strong>双击 BAT → 自动建 GitHub 仓库 → AI 自动开发 → 每个任务自动 commit → 全部完成后自动 push。30个项目同时跑，每个都有独立 GitHub 仓库，代码全部云端备份，全程零手动操作。
     </div>
   </div>
 
